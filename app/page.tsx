@@ -448,20 +448,24 @@ export default function Home() {
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --green: #12B76A;
-      --green-dark: #0a9055;
-      --green-glow: rgba(18,183,106,0.22);
+      --primary: #4f46e5;
+      --primary-dark: #3730a3;
+      --primary-glow: rgba(79,70,229,0.15);
+      --primary-light: #e0e7ff;
+      --green: #10b981;
+      --green-dark: #065f46;
+      --green-glow: rgba(16,185,129,0.15);
       --green-light: #d1fae5;
-      --ink: #0A0F0A;
-      --ink2: #1e2b1e;
-      --muted: #536553;
-      --muted2: #8fa48f;
-      --surface: #F4F7F4;
-      --glass: rgba(255,255,255,0.72);
-      --border: rgba(18,183,106,0.14);
-      --border2: rgba(0,0,0,0.07);
-      --shadow: 0 4px 32px rgba(0,0,0,0.07);
-      --shadow-lg: 0 16px 64px rgba(0,0,0,0.11);
+      --ink: #0b0f19;
+      --ink2: #1e293b;
+      --muted: #475569;
+      --muted2: #94a3b8;
+      --surface: #f8fafc;
+      --glass: rgba(255,255,255,0.76);
+      --border: rgba(79,70,229,0.08);
+      --border2: rgba(0,0,0,0.06);
+      --shadow: 0 4px 32px rgba(0,0,0,0.03);
+      --shadow-lg: 0 16px 64px rgba(0,0,0,0.06);
       --radius: 20px;
       --radius-sm: 12px;
     }
@@ -469,7 +473,7 @@ export default function Home() {
     html { scroll-behavior: smooth; }
     body {
       font-family: 'Cabinet Grotesk', 'Helvetica Neue', sans-serif;
-      background: #F4F7F4;
+      background: #f8fafc;
       color: var(--ink);
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
@@ -481,10 +485,10 @@ export default function Home() {
       transition: background 0.3s, box-shadow 0.3s, backdrop-filter 0.3s;
     }
     .nav.scrolled {
-      background: rgba(244,247,244,0.88);
+      background: rgba(248,250,252,0.88);
       backdrop-filter: blur(20px);
       -webkit-backdrop-filter: blur(20px);
-      box-shadow: 0 1px 0 rgba(0,0,0,0.07);
+      box-shadow: 0 1px 0 rgba(0,0,0,0.05);
     }
     .nav-inner {
       max-width: 1180px; margin: 0 auto;
@@ -498,9 +502,9 @@ export default function Home() {
     }
     .logo-mark {
       width: 34px; height: 34px; border-radius: 10px;
-      background: linear-gradient(135deg,#12B76A,#4ade80);
+      background: linear-gradient(135deg,#4f46e5,#6366f1);
       display: flex; align-items: center; justify-content: center;
-      box-shadow: 0 4px 12px var(--green-glow);
+      box-shadow: 0 4px 12px var(--primary-glow);
     }
     .nav-links { display: flex; gap: 2rem; }
     .nav-link {
@@ -520,18 +524,18 @@ export default function Home() {
     }
     .btn-ghost:hover { color: var(--ink); background: rgba(0,0,0,0.04); }
     .btn-primary {
-      background: linear-gradient(135deg,#12B76A,#0ea05e);
+      background: linear-gradient(135deg,#4f46e5,#4338ca);
       color: #fff; padding: 0.6rem 1.4rem; font-size: 0.875rem;
-      box-shadow: 0 4px 16px var(--green-glow);
+      box-shadow: 0 4px 16px var(--primary-glow);
     }
     .btn-primary:hover {
       transform: translateY(-1px);
-      box-shadow: 0 8px 28px var(--green-glow);
+      box-shadow: 0 8px 28px var(--primary-glow);
     }
     .btn-primary:active { transform: translateY(0); }
     .btn-xl {
       padding: 0.9rem 2.2rem; font-size: 1rem;
-      box-shadow: 0 6px 24px var(--green-glow);
+      box-shadow: 0 6px 24px var(--primary-glow);
     }
     .btn-outline {
       background: transparent; color: var(--ink);
@@ -539,8 +543,8 @@ export default function Home() {
       padding: 0.9rem 2.2rem; font-size: 1rem;
     }
     .btn-outline:hover {
-      border-color: var(--green); color: var(--green);
-      background: rgba(18,183,106,0.04);
+      border-color: var(--primary); color: var(--primary);
+      background: rgba(79,70,229,0.04);
     }
     .hamburger {
       display: none; flex-direction: column; gap: 5px;
@@ -553,22 +557,34 @@ export default function Home() {
 
     /* ── Hero ── */
     .hero {
-      min-height: 100vh; padding: 120px 1.5rem 80px;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
+      min-height: 100vh; padding: 140px 1.5rem 80px;
+      display: flex; align-items: center; justify-content: center;
       position: relative; overflow: hidden;
       background:
-        radial-gradient(ellipse 90% 60% at 50% -10%, rgba(18,183,106,0.13) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(74,222,128,0.08) 0%, transparent 60%),
-        #F4F7F4;
-      text-align: center;
+        radial-gradient(ellipse 90% 60% at 50% -10%, rgba(79,70,229,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 80% 80%, rgba(59,130,246,0.05) 0%, transparent 60%),
+        #0b0f19;
+      color: #fff;
+    }
+    .hero-container {
+      max-width: 1180px; margin: 0 auto; width: 100%;
+      display: grid; grid-template-columns: 1.25fr 0.75fr;
+      gap: 3.5rem; align-items: center; text-align: left;
+      position: relative; z-index: 10;
+    }
+    @media (max-width: 968px) {
+      .hero-container {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 2.5rem;
+      }
     }
     .hero-grid-bg {
       position: absolute; inset: 0; pointer-events: none; overflow: hidden;
-      opacity: 0.35;
+      opacity: 0.15;
       background-image:
-        linear-gradient(rgba(18,183,106,0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(18,183,106,0.1) 1px, transparent 1px);
+        linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
       background-size: 64px 64px;
       mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 0%, transparent 80%);
     }
@@ -577,21 +593,21 @@ export default function Home() {
     }
     .hero-orb-1 {
       width: 500px; height: 500px; top: -200px; left: 50%; transform: translateX(-50%);
-      background: radial-gradient(circle, rgba(18,183,106,0.18) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(79,70,229,0.12) 0%, transparent 70%);
     }
     .hero-badge {
       display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(18,183,106,0.1); border: 1px solid rgba(18,183,106,0.25);
+      background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08);
       border-radius: 100px; padding: 0.35rem 1rem;
-      font-size: 0.78rem; font-weight: 700; color: var(--green-dark);
+      font-size: 0.78rem; font-weight: 700; color: var(--muted2);
       letter-spacing: 0.06em; text-transform: uppercase;
-      margin-bottom: 1.75rem;
+      margin-bottom: 1.5rem;
       animation: fadeUp 0.5s ease both;
     }
     .hero-badge-dot {
       width: 6px; height: 6px; border-radius: 50%;
-      background: var(--green); flex-shrink: 0;
-      box-shadow: 0 0 6px var(--green);
+      background: var(--primary); flex-shrink: 0;
+      box-shadow: 0 0 6px var(--primary);
       animation: pulse 2s ease infinite;
     }
     @keyframes pulse {
@@ -600,35 +616,57 @@ export default function Home() {
     }
     .hero-h1 {
       font-family: 'Cabinet Grotesk', sans-serif;
-      font-size: clamp(2.6rem, 6vw, 4.5rem);
+      font-size: clamp(2.6rem, 5.5vw, 4.2rem);
       line-height: 1.1; letter-spacing: -0.03em;
-      color: var(--ink); font-weight: 800;
-      max-width: 820px; margin: 0 auto 1.25rem;
+      color: #fff; font-weight: 800;
+      margin-bottom: 1.25rem;
       animation: fadeUp 0.55s 0.05s ease both;
     }
-    .hero-h1 em { font-style: normal; color: var(--green); }
+    .hero-h1 em { font-style: normal; color: #818cf8; }
     .hero-sub {
-      font-size: clamp(1rem, 2vw, 1.15rem);
-      color: var(--muted); max-width: 560px;
-      margin: 0 auto 2.5rem; line-height: 1.7;
+      font-size: clamp(0.95rem, 1.8vw, 1.1rem);
+      color: var(--muted2); max-width: 540px;
+      margin-bottom: 2.25rem; line-height: 1.6;
       font-weight: 500;
       animation: fadeUp 0.55s 0.1s ease both;
     }
+    @media (max-width: 968px) {
+      .hero-sub { margin-left: auto; margin-right: auto; }
+      .hero-ctas { justify-content: center; }
+      .hero-stats { justify-content: center; }
+    }
     .hero-ctas {
-      display: flex; gap: 0.875rem; justify-content: center; flex-wrap: wrap;
-      margin-bottom: 3.5rem;
+      display: flex; gap: 0.875rem; justify-content: flex-start; flex-wrap: wrap;
+      margin-bottom: 3rem;
       animation: fadeUp 0.55s 0.15s ease both;
     }
+    .hero-ctas .btn-outline {
+      color: #fff; border-color: rgba(255,255,255,0.15);
+    }
+    .hero-ctas .btn-outline:hover {
+      background: rgba(255,255,255,0.05); border-color: #fff;
+    }
     .hero-stats {
-      display: flex; gap: 2.5rem; justify-content: center; flex-wrap: wrap;
+      display: flex; gap: 2.25rem; justify-content: flex-start; flex-wrap: wrap;
       animation: fadeUp 0.55s 0.2s ease both;
     }
-    .hero-stat { text-align: center; }
+    .hero-stat { text-align: left; }
     .hero-stat-val {
       font-family: 'Cabinet Grotesk', sans-serif; font-weight: 800;
-      font-size: 1.6rem; color: var(--ink); display: block; line-height: 1;
+      font-size: 1.6rem; color: #fff; display: block; line-height: 1;
     }
     .hero-stat-lbl { font-size: 0.78rem; color: var(--muted2); margin-top: 3px; }
+
+    .hero-graphic-wrap {
+      display: flex; align-items: center; justify-content: center; width: 100%;
+      animation: fadeUp 0.7s 0.15s ease both;
+    }
+    .pulse-path {
+      animation: pulsePath 4s linear infinite;
+    }
+    @keyframes pulsePath {
+      to { stroke-dashoffset: -180; }
+    }
 
     @keyframes fadeUp {
       from { opacity: 0; transform: translateY(18px); }
@@ -641,7 +679,7 @@ export default function Home() {
     .section-label {
       display: inline-block; font-size: 0.72rem; font-weight: 800;
       letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--green-dark); margin-bottom: 0.75rem;
+      color: var(--primary); margin-bottom: 0.75rem;
     }
     .section-h2 {
       font-family: 'Cabinet Grotesk', sans-serif;
@@ -649,7 +687,7 @@ export default function Home() {
       font-weight: 800; letter-spacing: -0.03em;
       line-height: 1.15; color: var(--ink);
     }
-    .section-h2 em { font-style: normal; color: var(--green); }
+    .section-h2 em { font-style: normal; color: var(--primary); }
     .section-desc {
       color: var(--muted); font-size: 1rem; line-height: 1.7;
       max-width: 520px; margin-top: 0.75rem;
@@ -658,7 +696,7 @@ export default function Home() {
     /* ── Comparison ── */
     .compare-section {
       background:
-        radial-gradient(ellipse 70% 50% at 50% 100%, rgba(18,183,106,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 70% 50% at 50% 100%, rgba(79,70,229,0.03) 0%, transparent 70%),
         #fff;
       border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
     }
@@ -669,7 +707,7 @@ export default function Home() {
     }
     .compare-top {
       padding: 1.75rem 2rem;
-      background: linear-gradient(135deg, rgba(18,183,106,0.06) 0%, rgba(244,247,244,0.5) 100%);
+      background: linear-gradient(135deg, rgba(79,70,229,0.03) 0%, #f8fafc 100%);
       border-bottom: 1px solid var(--border);
       display: flex; gap: 1rem; flex-wrap: wrap; align-items: flex-end;
     }
@@ -687,8 +725,8 @@ export default function Home() {
       outline: none; transition: border-color 0.2s, box-shadow 0.2s;
     }
     .amount-input:focus {
-      border-color: var(--green);
-      box-shadow: 0 0 0 3px rgba(18,183,106,0.12);
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-glow);
     }
     .currency-btn {
       background: #fff; border: 1.5px solid rgba(0,0,0,0.1);
@@ -698,7 +736,7 @@ export default function Home() {
       white-space: nowrap; transition: border-color 0.2s; position: relative;
       min-width: 160px;
     }
-    .currency-btn:hover { border-color: var(--green); }
+    .currency-btn:hover { border-color: var(--primary); }
     .currency-drop {
       position: absolute; top: calc(100% + 6px); left: 0; right: 0;
       background: #fff; border: 1px solid rgba(0,0,0,0.1); border-radius: 14px;
@@ -711,7 +749,7 @@ export default function Home() {
       transition: background 0.15s;
     }
     .currency-opt:hover { background: var(--surface); }
-    .currency-opt.active { background: rgba(18,183,106,0.08); color: var(--green-dark); }
+    .currency-opt.active { background: rgba(79,70,229,0.08); color: var(--primary); }
     .compare-tabs {
       display: flex; gap: 4px;
       padding: 1rem 2rem 0;
@@ -723,7 +761,7 @@ export default function Home() {
       transition: all 0.2s;
     }
     .tab-btn.active {
-      background: rgba(18,183,106,0.1); color: var(--green-dark);
+      background: rgba(79,70,229,0.1); color: var(--primary);
     }
     .tab-btn:hover:not(.active) { background: var(--surface); color: var(--muted); }
     .providers-list { padding: 0.75rem 2rem 2rem; display: flex; flex-direction: column; gap: 0.75rem; }
@@ -736,21 +774,20 @@ export default function Home() {
       cursor: pointer; transition: all 0.2s; position: relative;
     }
     .provider-row:hover {
-      border-color: rgba(18,183,106,0.3);
-      box-shadow: 0 4px 24px rgba(18,183,106,0.1);
+      border-color: rgba(79,70,229,0.3);
+      box-shadow: 0 4px 24px rgba(79,70,229,0.06);
       transform: translateY(-2px);
     }
     .provider-row.best {
-      border-color: var(--green);
-      background: linear-gradient(135deg, rgba(18,183,106,0.04) 0%, #fff 100%);
-      box-shadow: 0 4px 24px rgba(18,183,106,0.13);
+      border-color: rgba(16,185,129,0.3);
+      background: linear-gradient(135deg, rgba(16,185,129,0.02) 0%, #fff 100%);
+      box-shadow: 0 4px 20px rgba(16,185,129,0.05);
     }
     .p-logo {
-      width: 48px; height: 48px; border-radius: 50%;
+      width: 46px; height: 46px; border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      font-weight: 700; font-size: 1.25rem; color: #fff; flex-shrink: 0;
-      letter-spacing: -0.02em; border: 1px solid rgba(0,0,0,0.06);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.05); font-family: 'Cabinet Grotesk', sans-serif;
+      flex-shrink: 0; border: 1.5px solid rgba(0,0,0,0.08);
+      background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.03);
     }
     .p-name { font-weight: 700; font-size: 0.95rem; line-height: 1.2; }
     .p-meta { font-size: 0.75rem; color: var(--muted2); margin-top: 2px; }
@@ -768,19 +805,19 @@ export default function Home() {
       font-size: 0.65rem; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase;
       padding: 0.2rem 0.7rem; border-radius: 100px; white-space: nowrap;
     }
-    .badge-best { background: #12B76A; color: #fff; }
-    .badge-fast { background: #0070E0; color: #fff; }
+    .badge-best { background: #10b981; color: #fff; }
+    .badge-fast { background: #4f46e5; color: #fff; }
     .badge-cheap { background: #7C3AED; color: #fff; }
     .saving-tag {
       font-size: 0.7rem; font-weight: 700; color: var(--green-dark);
-      background: rgba(18,183,106,0.1); border-radius: 100px;
+      background: rgba(16,185,129,0.1); border-radius: 100px;
       padding: 0.18rem 0.55rem; white-space: nowrap;
     }
     .compare-footer {
       border-top: 1px solid var(--border);
       padding: 1rem 2rem;
       display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 1rem;
-      background: rgba(244,247,244,0.5);
+      background: #f8fafc;
     }
     .live-dot {
       width: 7px; height: 7px; border-radius: 50%; background: var(--green);
@@ -792,21 +829,21 @@ export default function Home() {
     /* ── Savings ── */
     .savings-section { background: var(--surface); }
     .savings-card {
-      background: linear-gradient(135deg, #0a2d18 0%, #0f3d22 50%, #145a30 100%);
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       border-radius: 28px; padding: 3.5rem;
       position: relative; overflow: hidden;
-      box-shadow: 0 24px 80px rgba(10,45,24,0.3);
+      box-shadow: 0 24px 80px rgba(15,23,42,0.3);
     }
     .savings-orb {
       position: absolute; border-radius: 50%; pointer-events: none; filter: blur(60px);
     }
     .savings-orb-1 {
       width: 400px; height: 400px; top: -150px; right: -100px;
-      background: radial-gradient(circle, rgba(74,222,128,0.18) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(16,185,129,0.08) 0%, transparent 70%);
     }
     .savings-orb-2 {
       width: 300px; height: 300px; bottom: -100px; left: 50px;
-      background: radial-gradient(circle, rgba(18,183,106,0.15) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(16,185,129,0.06) 0%, transparent 70%);
     }
     .savings-big {
       font-family: 'Cabinet Grotesk', sans-serif;
@@ -861,13 +898,13 @@ export default function Home() {
     .step-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); }
     .step-num {
       font-family: 'Cabinet Grotesk', sans-serif;
-      font-size: 2.5rem; color: var(--green-light); line-height: 1;
+      font-size: 2.5rem; color: var(--primary-light); line-height: 1;
       font-weight: 800;
     }
     .step-icon {
       width: 48px; height: 48px; border-radius: 14px;
-      background: linear-gradient(135deg, rgba(18,183,106,0.12), rgba(74,222,128,0.08));
-      border: 1px solid rgba(18,183,106,0.2);
+      background: linear-gradient(135deg, rgba(79,70,229,0.08), rgba(99,102,241,0.03));
+      border: 1px solid rgba(79,70,229,0.15);
       display: flex; align-items: center; justify-content: center;
       margin: 0.75rem 0 1rem;
     }
@@ -877,7 +914,7 @@ export default function Home() {
     /* ── Trust ── */
     .trust-section {
       background:
-        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(18,183,106,0.06) 0%, transparent 60%),
+        radial-gradient(ellipse 80% 50% at 50% 0%, rgba(79,70,229,0.03) 0%, transparent 60%),
         #fff;
       border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
     }
@@ -891,20 +928,20 @@ export default function Home() {
       text-align: center;
       transition: transform 0.2s, background 0.2s;
     }
-    .trust-card:hover { transform: translateY(-3px); background: #fff; }
+    .trust-card:hover { transform: translateY(-3px); background: #fff; border-color: rgba(79,70,229,0.2); }
     .trust-icon {
       width: 52px; height: 52px; border-radius: 16px;
-      background: linear-gradient(135deg, #12B76A, #4ade80);
+      background: linear-gradient(135deg, #4f46e5, #6366f1);
       display: flex; align-items: center; justify-content: center;
       margin: 0 auto 1rem;
-      box-shadow: 0 4px 16px var(--green-glow);
+      box-shadow: 0 4px 16px var(--primary-glow);
     }
     .trust-title { font-weight: 700; font-size: 0.95rem; margin-bottom: 0.35rem; }
     .trust-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.6; }
 
     /* ── Rate Alert Form ── */
     .alert-section {
-      background: #F4F7F4;
+      background: #f8fafc;
     }
     .alert-card {
       max-width: 600px; margin: 0 auto;
@@ -920,22 +957,22 @@ export default function Home() {
       font-size: 1rem; font-family: inherit; color: var(--ink);
       outline: none; transition: border-color 0.2s, box-shadow 0.2s;
     }
-    .alert-input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(18,183,106,0.12); }
+    .alert-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-glow); }
     .alert-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
     .alert-submit {
-      width: 100%; background: linear-gradient(135deg,#12B76A,#0ea05e);
+      width: 100%; background: linear-gradient(135deg,#4f46e5,#4338ca);
       color: #fff; padding: 1rem; font-size: 1rem; font-weight: 800;
       border: none; border-radius: var(--radius-sm); font-family: inherit;
-      cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 16px var(--green-glow);
+      cursor: pointer; transition: all 0.2s; box-shadow: 0 4px 16px var(--primary-glow);
       margin-top: 0.5rem;
     }
-    .alert-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--green-glow); }
+    .alert-submit:hover { transform: translateY(-2px); box-shadow: 0 8px 24px var(--primary-glow); }
     .alert-success {
       text-align: center; padding: 3rem 1rem;
     }
     .alert-success-icon {
       width: 64px; height: 64px; border-radius: 50%;
-      background: rgba(18,183,106,0.12); color: var(--green);
+      background: rgba(16,185,129,0.1); color: var(--green);
       display: flex; align-items: center; justify-content: center;
       margin: 0 auto 1.5rem;
     }
@@ -948,22 +985,22 @@ export default function Home() {
     .cta-banner {
       padding: 6rem 1.5rem;
       background:
-        radial-gradient(ellipse 60% 70% at 50% 50%, rgba(18,183,106,0.1) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 70% at 50% 50%, rgba(79,70,229,0.06) 0%, transparent 70%),
         var(--surface);
     }
     .cta-card {
       max-width: 800px; margin: 0 auto;
-      background: linear-gradient(135deg, #0a2d18 0%, #0f4d28 60%, #12B76A 200%);
+      background: linear-gradient(135deg, #0b0f19 0%, #1e1b4b 60%, #4f46e5 200%);
       border-radius: 32px; padding: 4rem 3rem;
       text-align: center; position: relative; overflow: hidden;
-      box-shadow: 0 32px 100px rgba(10,45,24,0.35);
+      box-shadow: 0 32px 100px rgba(11,15,25,0.4);
     }
     .cta-orb {
       position: absolute; border-radius: 50%; pointer-events: none;
     }
     .cta-orb-1 {
       width: 300px; height: 300px; top: -100px; right: -80px;
-      background: radial-gradient(circle, rgba(74,222,128,0.2) 0%, transparent 70%);
+      background: radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%);
       filter: blur(50px);
     }
     .cta-h2 {
@@ -972,30 +1009,30 @@ export default function Home() {
       color: #fff; font-weight: 800; letter-spacing: -0.03em;
       margin-bottom: 1rem; position: relative;
     }
-    .cta-h2 em { color: #4ade80; font-style: normal; }
+    .cta-h2 em { color: #818cf8; font-style: normal; }
     .cta-sub { color: rgba(255,255,255,0.65); font-size: 1rem; line-height: 1.7; margin-bottom: 2.5rem; position: relative; }
     .cta-btns { display: flex; gap: 0.875rem; justify-content: center; flex-wrap: wrap; position: relative; }
     .btn-cta {
-      background: #4ade80; color: #0a2d18;
+      background: #4f46e5; color: #fff;
       padding: 0.9rem 2.2rem; font-size: 1rem; font-weight: 800;
       border-radius: 100px; border: none; font-family: inherit; cursor: pointer;
-      transition: all 0.2s; box-shadow: 0 6px 24px rgba(74,222,128,0.35);
+      transition: all 0.2s; box-shadow: 0 6px 24px var(--primary-glow);
     }
     .btn-cta:hover {
-      background: #86efac; transform: translateY(-2px);
-      box-shadow: 0 12px 36px rgba(74,222,128,0.45);
+      background: #6366f1; transform: translateY(-2px);
+      box-shadow: 0 12px 36px var(--primary-glow);
     }
     .btn-cta-ghost {
-      background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.85);
+      background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.85);
       padding: 0.9rem 2.2rem; font-size: 1rem; font-weight: 600;
-      border-radius: 100px; border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 100px; border: 1px solid rgba(255,255,255,0.15);
       font-family: inherit; cursor: pointer; transition: all 0.2s;
     }
-    .btn-cta-ghost:hover { background: rgba(255,255,255,0.18); }
+    .btn-cta-ghost:hover { background: rgba(255,255,255,0.12); border-color: rgba(255,255,255,0.3); }
 
     /* ── Footer ── */
     footer {
-      background: #0a0f0a; padding: 4rem 1.5rem 2rem;
+      background: #090d16; padding: 4rem 1.5rem 2rem;
     }
     .footer-inner { max-width: 1180px; margin: 0 auto; }
     .footer-grid {
@@ -1007,26 +1044,26 @@ export default function Home() {
       font-size: 1.25rem; color: #fff; display: flex; align-items: center; gap: 8px;
       margin-bottom: 0.75rem; letter-spacing: -0.02em;
     }
-    .footer-desc { font-size: 0.825rem; color: #536553; line-height: 1.7; }
+    .footer-desc { font-size: 0.825rem; color: #64748b; line-height: 1.7; }
     .footer-heading {
       font-size: 0.72rem; font-weight: 800; letter-spacing: 0.1em;
-      text-transform: uppercase; color: #2d4a2d; margin-bottom: 1.1rem;
+      text-transform: uppercase; color: #94a3b8; margin-bottom: 1.1rem;
     }
     .footer-links { display: flex; flex-direction: column; gap: 0.6rem; }
     .footer-link {
-      font-size: 0.825rem; color: #536553; text-decoration: none; transition: color 0.2s;
+      font-size: 0.825rem; color: #64748b; text-decoration: none; transition: color 0.2s;
     }
-    .footer-link:hover { color: #86efac; }
+    .footer-link:hover { color: #fff; }
     .footer-bottom {
-      border-top: 1px solid #151f15;
+      border-top: 1px solid #1e293b;
       padding-top: 1.75rem;
       display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;
     }
-    .footer-copy { font-size: 0.78rem; color: #2d4a2d; }
+    .footer-copy { font-size: 0.78rem; color: #64748b; }
     .footer-flags { display: flex; gap: 0.5rem; align-items: center; }
     .flag-chip {
-      font-size: 0.72rem; color: #2d4a2d; background: #111811;
-      border: 1px solid #1a281a; border-radius: 100px;
+      font-size: 0.72rem; color: #94a3b8; background: #1e293b;
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 100px;
       padding: 0.2rem 0.65rem; display: flex; align-items: center; gap: 4px;
     }
 
@@ -1150,41 +1187,105 @@ export default function Home() {
         <div className="hero-grid-bg" />
         <div className="hero-orb hero-orb-1" />
 
-        <div className="hero-badge">
-          <span className="hero-badge-dot" />
-          Independent Comparison · Live Rates · Global to India
-        </div>
-
-        <h1 className="hero-h1">
-          Compare exchange rates<br />
-          <em>to India. Independently.</em>
-        </h1>
-
-        <p className="hero-sub">
-          We are not a provider. We are an independent platform helping you track real exchange rates, uncover hidden fees, and compare providers in real-time.
-        </p>
-
-        <div className="hero-ctas">
-          <a href="#compare" className="btn btn-primary btn-xl">
-            Compare Rates →
-          </a>
-          <a href="#savings" className="btn btn-outline btn-xl">
-            View Savings
-          </a>
-        </div>
-
-        <div className="hero-stats">
-          {[
-            { val: "100%", lbl: "Independent" },
-            { val: "12+", lbl: "Providers compared" },
-            { val: "60s", lbl: "Rate refresh" },
-            { val: "Free", lbl: "To use forever" },
-          ].map((s) => (
-            <div className="hero-stat" key={s.lbl}>
-              <span className="hero-stat-val">{s.val}</span>
-              <span className="hero-stat-lbl">{s.lbl}</span>
+        <div className="hero-container">
+          <div>
+            <div className="hero-badge">
+              <span className="hero-badge-dot" />
+              Independent Comparison · Live Rates · Global to India
             </div>
-          ))}
+
+            <h1 className="hero-h1">
+              Compare exchange rates<br />
+              <em>to India. Independently.</em>
+            </h1>
+
+            <p className="hero-sub">
+              We are not a provider. We are an independent platform helping you track real exchange rates, uncover hidden fees, and compare providers in real-time.
+            </p>
+
+            <div className="hero-ctas">
+              <a href="#compare" className="btn btn-primary btn-xl">
+                Compare Rates →
+              </a>
+              <a href="#savings" className="btn btn-outline btn-xl">
+                View Savings
+              </a>
+            </div>
+
+            <div className="hero-stats">
+              {[
+                { val: "100%", lbl: "Independent" },
+                { val: "12+", lbl: "Providers compared" },
+                { val: "60s", lbl: "Rate refresh" },
+                { val: "Free", lbl: "To use forever" },
+              ].map((s) => (
+                <div className="hero-stat" key={s.lbl}>
+                  <span className="hero-stat-val">{s.val}</span>
+                  <span className="hero-stat-lbl">{s.lbl}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="hero-graphic-wrap">
+            <svg viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", maxWidth: 460, height: "auto" }}>
+              <defs>
+                <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stopColor="#4f46e5" stopOpacity="0.25"/>
+                  <stop offset="100%" stopColor="#4f46e5" stopOpacity="0"/>
+                </radialGradient>
+                <linearGradient id="flow-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#3b82f6"/>
+                  <stop offset="50%" stopColor="#6366f1"/>
+                  <stop offset="100%" stopColor="#10b981"/>
+                </linearGradient>
+              </defs>
+
+              <circle cx="250" cy="220" r="180" fill="url(#glow)"/>
+
+              <g>
+                <circle cx="280" cy="240" r="14" fill="#10b981" fillOpacity="0.2"/>
+                <circle cx="280" cy="240" r="7" fill="#10b981"/>
+                <text x="280" y="266" fill="#10b981" fontSize="10" fontWeight="800" textAnchor="middle" fontFamily="'Cabinet Grotesk', sans-serif">INDIA</text>
+              </g>
+
+              <g>
+                <circle cx="80" cy="100" r="5" fill="rgba(255,255,255,0.7)"/>
+                <text x="80" y="88" fill="rgba(255,255,255,0.5)" fontSize="9" textAnchor="middle" fontFamily="sans-serif">USA</text>
+              </g>
+              <g>
+                <circle cx="200" cy="80" r="5" fill="rgba(255,255,255,0.7)"/>
+                <text x="200" y="68" fill="rgba(255,255,255,0.5)" fontSize="9" textAnchor="middle" fontFamily="sans-serif">UK</text>
+              </g>
+              <g>
+                <circle cx="150" cy="190" r="5" fill="rgba(255,255,255,0.7)"/>
+                <text x="150" y="178" fill="rgba(255,255,255,0.5)" fontSize="9" textAnchor="middle" fontFamily="sans-serif">UAE</text>
+              </g>
+              <g>
+                <circle cx="380" cy="320" r="5" fill="rgba(255,255,255,0.7)"/>
+                <text x="380" y="308" fill="rgba(255,255,255,0.5)" fontSize="9" textAnchor="middle" fontFamily="sans-serif">AUS</text>
+              </g>
+              <g>
+                <circle cx="60" cy="160" r="5" fill="rgba(255,255,255,0.7)"/>
+                <text x="60" y="148" fill="rgba(255,255,255,0.5)" fontSize="9" textAnchor="middle" fontFamily="sans-serif">CAN</text>
+              </g>
+
+              <path d="M 80 100 Q 180 120 280 240" stroke="rgba(255,255,255,0.06)" strokeWidth="1.5" fill="none"/>
+              <path d="M 80 100 Q 180 120 280 240" stroke="url(#flow-grad)" strokeWidth="2.5" fill="none" strokeDasharray="30, 150" className="pulse-path"/>
+
+              <path d="M 200 80 Q 230 150 280 240" stroke="rgba(255,255,255,0.06)" strokeWidth="1.5" fill="none"/>
+              <path d="M 200 80 Q 230 150 280 240" stroke="url(#flow-grad)" strokeWidth="2.5" fill="none" strokeDasharray="30, 150" className="pulse-path" style={{ animationDelay: "-1s" }}/>
+
+              <path d="M 150 190 Q 210 200 280 240" stroke="rgba(255,255,255,0.06)" strokeWidth="1.5" fill="none"/>
+              <path d="M 150 190 Q 210 200 280 240" stroke="url(#flow-grad)" strokeWidth="2.5" fill="none" strokeDasharray="20, 100" className="pulse-path" style={{ animationDelay: "-2s" }}/>
+
+              <path d="M 380 320 Q 340 270 280 240" stroke="rgba(255,255,255,0.06)" strokeWidth="1.5" fill="none"/>
+              <path d="M 380 320 Q 340 270 280 240" stroke="url(#flow-grad)" strokeWidth="2.5" fill="none" strokeDasharray="25, 120" className="pulse-path" style={{ animationDelay: "-3s" }}/>
+
+              <path d="M 60 160 Q 150 220 280 240" stroke="rgba(255,255,255,0.06)" strokeWidth="1.5" fill="none"/>
+              <path d="M 60 160 Q 150 220 280 240" stroke="url(#flow-grad)" strokeWidth="2.5" fill="none" strokeDasharray="30, 150" className="pulse-path" style={{ animationDelay: "-1.5s" }}/>
+            </svg>
+          </div>
         </div>
       </section>
 
@@ -1336,11 +1437,23 @@ export default function Home() {
                       <span className={`p-badge badge-${p.badgeType}`}>{p.badge}</span>
                     )}
 
-                    <div
-                      className="p-logo"
-                      style={{ background: p.gradient, color: p.textColor || "#fff" }}
-                    >
-                      {p.abbr}
+                    <div className="p-logo">
+                      {p.id === "wise" && (
+                        <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 26, height: 26 }}><path d="M5 10 L25 10 L29 20 L37 10 L45 10 L33 26 L42 40 L34 40 L27 28 L21 40 L13 40 L23 23 Z" fill="#00B9FF" /></svg>
+                      )}
+                      {p.id === "remitly" && (
+                        <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 26, height: 26 }}><path d="M10 5 H30 C38 5 42 10 42 16 C42 22 38 27 30 27 H18 V45 H10 Z M18 13 V20 H30 C33 20 34 18 34 16 C34 14 33 13 30 13 Z" fill="#FF6B35" /></svg>
+                      )}
+                      {p.id === "paysend" && (
+                        <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 26, height: 26 }}><circle cx="18" cy="25" r="12" fill="#7C3AED" fillOpacity="0.95" /><circle cx="32" cy="25" r="12" fill="#FFCC00" fillOpacity="0.85" /></svg>
+                      )}
+                      {p.id === "wu" && (
+                        <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 26, height: 26 }}><rect x="5" y="5" width="40" height="40" rx="6" fill="#000" /><path d="M12 15 H18 L21 28 L24 15 H30 L25 35 H19 Z M31 15 H37 V28 C37 32 35 35 31 35 C28 35 26 32 26 28 V15 H31 Z" fill="#FFCC00" /></svg>
+                      )}
+                      {p.id === "xoom" && (
+                        <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 26, height: 26 }}><path d="M10 10 L22 25 L10 40 H18 L25 30 L32 40 H40 L28 25 L40 10 H32 L25 20 L18 10 Z" fill="#0070E0" /></svg>
+                      )}
+                      {!["wise", "remitly", "paysend", "wu", "xoom"].includes(p.id) && <span style={{ color: "var(--ink)" }}>{p.abbr}</span>}
                     </div>
 
                     <div className="p-name-block">
@@ -1547,8 +1660,8 @@ export default function Home() {
                 n: "01",
                 icon: (
                   <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                    <rect x="3" y="5" width="16" height="12" rx="2" stroke="#12B76A" strokeWidth="1.7" />
-                    <path d="M7 9h8M7 13h5" stroke="#12B76A" strokeWidth="1.7" strokeLinecap="round" />
+                    <rect x="3" y="5" width="16" height="12" rx="2" stroke="var(--primary)" strokeWidth="1.7" />
+                    <path d="M7 9h8M7 13h5" stroke="var(--primary)" strokeWidth="1.7" strokeLinecap="round" />
                   </svg>
                 ),
                 title: "Enter your transfer details",
@@ -1558,7 +1671,7 @@ export default function Home() {
                 n: "02",
                 icon: (
                   <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                    <path d="M4 11h14M11 4l7 7-7 7" stroke="#12B76A" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M4 11h14M11 4l7 7-7 7" stroke="var(--primary)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 ),
                 title: "Compare all providers instantly",
@@ -1568,7 +1681,7 @@ export default function Home() {
                 n: "03",
                 icon: (
                   <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
-                    <path d="M5 11l5 5 7-9" stroke="#12B76A" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M5 11l5 5 7-9" stroke="var(--primary)" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
                 ),
                 title: "Transfer with confidence",
@@ -1731,17 +1844,17 @@ export default function Home() {
                 )}
                 <div className="alert-input-group">
                   <label className="alert-label">Full Name</label>
-                  <input required type="text" className="alert-input" placeholder="e.g. Rahul Sharma" value={alertForm.name} onChange={(e) => setAlertForm({...alertForm, name: e.target.value})} />
+                  <input required type="text" className="alert-input" placeholder="John Paul" value={alertForm.name} onChange={(e) => setAlertForm({...alertForm, name: e.target.value})} />
                 </div>
                 
                 <div className="alert-row">
                   <div className="alert-input-group">
                     <label className="alert-label">Email Address</label>
-                    <input required type="email" className="alert-input" placeholder="rahul@example.com" value={alertForm.email} onChange={(e) => setAlertForm({...alertForm, email: e.target.value})} />
+                    <input required type="email" className="alert-input" placeholder="john.paul@example.com" value={alertForm.email} onChange={(e) => setAlertForm({...alertForm, email: e.target.value})} />
                   </div>
                   <div className="alert-input-group">
                     <label className="alert-label">WhatsApp Number</label>
-                    <input required type="tel" className="alert-input" placeholder="+971 50 123 4567" value={alertForm.phone} onChange={(e) => setAlertForm({...alertForm, phone: e.target.value})} />
+                    <input required type="tel" className="alert-input" placeholder="Enter your WhatsApp number" value={alertForm.phone} onChange={(e) => setAlertForm({...alertForm, phone: e.target.value})} />
                   </div>
                 </div>
 
