@@ -120,6 +120,10 @@ const USD_RATES: Record<string, number> = {
 function formatINR(n: number) {
   return "₹" + n.toLocaleString("en-IN", { maximumFractionDigits: 0 });
 }
+function formatCurrency(amountVal: number | string, curCode: string) {
+  const numericAmount = typeof amountVal === "string" ? parseFloat(amountVal || "0") : amountVal;
+  return curCode + " " + numericAmount.toLocaleString(undefined, { maximumFractionDigits: 0 });
+}
 function Stars({ rating }: { rating: number }) {
   return (
     <span style={{ display: "inline-flex", gap: 1 }}>
@@ -142,7 +146,8 @@ export default function Home() {
   const [showCurrencyDrop, setShowCurrencyDrop] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [activeTab, setActiveTab] = useState("all");
-  const [savingsYears, setSavingsYears] = useState(1);
+  const [savingsMonths, setSavingsMonths] = useState(12);
+  const [animatedSavings, setAnimatedSavings] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   
@@ -328,7 +333,32 @@ export default function Home() {
   const sorted = [...providers].sort((a, b) => inrReceived(b) - inrReceived(a));
   const best = sorted[0];
   const worst = sorted[sorted.length - 1];
-  const annualSaving = (inrReceived(best) - inrReceived(worst)) * 12 * savingsYears;
+  const annualSaving = (inrReceived(best) - inrReceived(worst)) * 12;
+  const totalSavings = (inrReceived(best) - inrReceived(worst)) * savingsMonths;
+
+  useEffect(() => {
+    let animationFrameId: number;
+    const start = animatedSavings;
+    const end = totalSavings;
+    const duration = 250; // 250ms transition
+    const startTime = performance.now();
+
+    function animate(currentTime: number) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease = progress * (2 - progress); // easeOutQuad
+      const currentVal = start + (end - start) * ease;
+      
+      setAnimatedSavings(currentVal);
+
+      if (progress < 1) {
+        animationFrameId = requestAnimationFrame(animate);
+      }
+    }
+
+    animationFrameId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationFrameId);
+  }, [totalSavings]);
 
   const filtered =
     activeTab === "all"
@@ -710,14 +740,41 @@ export default function Home() {
       font-weight: 800; line-height: 1; letter-spacing: -0.03em;
     }
     .savings-slider {
-      -webkit-appearance: none; width: 100%; height: 4px;
-      border-radius: 2px; background: rgba(255,255,255,0.2);
-      outline: none; cursor: pointer;
+      -webkit-appearance: none; width: 100%; height: 6px;
+      border-radius: 100px; background: rgba(255,255,255,0.15);
+      outline: none; cursor: pointer; transition: background 0.2s ease;
     }
     .savings-slider::-webkit-slider-thumb {
-      -webkit-appearance: none; width: 20px; height: 20px;
+      -webkit-appearance: none; width: 22px; height: 22px;
       border-radius: 50%; background: #4ade80;
-      cursor: pointer; box-shadow: 0 0 10px rgba(74,222,128,0.5);
+      cursor: pointer; box-shadow: 0 0 12px rgba(74,222,128,0.5);
+      transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.1s ease;
+    }
+    .savings-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.2);
+      background: #34d399;
+      box-shadow: 0 0 16px rgba(52,211,153,0.7);
+    }
+    .savings-slider::-webkit-slider-thumb:active {
+      transform: scale(1.3);
+      background: #059669;
+      box-shadow: 0 0 20px rgba(5,150,105,0.9);
+    }
+    .savings-slider::-moz-range-thumb {
+      width: 22px; height: 22px; border: none;
+      border-radius: 50%; background: #4ade80;
+      cursor: pointer; box-shadow: 0 0 12px rgba(74,222,128,0.5);
+      transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.1s ease;
+    }
+    .savings-slider::-moz-range-thumb:hover {
+      transform: scale(1.2);
+      background: #34d399;
+      box-shadow: 0 0 16px rgba(52,211,153,0.7);
+    }
+    .savings-slider::-moz-range-thumb:active {
+      transform: scale(1.3);
+      background: #059669;
+      box-shadow: 0 0 20px rgba(5,150,105,0.9);
     }
 
     /* ── How it works ── */
@@ -1225,13 +1282,13 @@ export default function Home() {
                         {p.fee === 0 ? (
                           <span style={{ color: "var(--green-dark)", fontWeight: 700 }}>No fee</span>
                         ) : (
-                          <span>· ${p.fee} fee</span>
+                          <span>· {formatCurrency(p.fee / (usdRates[currency] || 1), currency)} fee</span>
                         )}
                       </div>
                     </div>
 
                     <div className="p-rate-block">
-                      <div className="p-rate">₹{p.rate.toFixed(2)}/USD</div>
+                      <div className="p-rate">₹{(p.rate * (usdRates[currency] || 0)).toFixed(2)}/{currency}</div>
                       <div className="p-rate-sub">exchange rate</div>
                     </div>
 
@@ -1299,40 +1356,81 @@ export default function Home() {
                   You could save
                 </p>
                 <div className="savings-big">
-                  {formatINR(Math.round(annualSaving / 100) * 100)}
+                  {formatINR(Math.round(animatedSavings / 100) * 100)}
                 </div>
                 <p style={{ color: "#86efac", fontSize: "0.875rem", marginTop: "0.3rem" }}>
-                  per year by switching providers
+                  over {(() => {
+                    if (savingsMonths === 1) return "1 month";
+                    if (savingsMonths < 12) return `${savingsMonths} months`;
+                    if (savingsMonths === 12) return "1 year";
+                    if (savingsMonths === 18) return "18 months";
+                    if (savingsMonths % 12 === 0) {
+                      const yrs = savingsMonths / 12;
+                      return `${yrs} ${yrs === 1 ? "year" : "years"}`;
+                    }
+                    return `${savingsMonths} months`;
+                  })()} by switching providers
                 </p>
 
                 <div style={{ marginTop: "2rem", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "1.5rem" }}>
                   <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.75rem" }}>
-                    <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.8rem" }}>Sending {cur.symbol}{amount} {currency} / month</span>
+                    <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.8rem" }}>Sending {formatCurrency(amount, currency)} / month</span>
                     <span style={{ color: "#4ade80", fontWeight: 700, fontSize: "0.8rem" }}>
-                      {savingsYears} {savingsYears === 1 ? "year" : "years"}
+                      {(() => {
+                        if (savingsMonths === 1) return "1 month";
+                        if (savingsMonths < 12) return `${savingsMonths} months`;
+                        if (savingsMonths === 12) return "1 year";
+                        if (savingsMonths === 18) return "18 months";
+                        if (savingsMonths % 12 === 0) {
+                          const yrs = savingsMonths / 12;
+                          return `${yrs} ${yrs === 1 ? "year" : "years"}`;
+                        }
+                        return `${savingsMonths} months`;
+                      })()}
                     </span>
                   </div>
                   <input
                     type="range"
                     min={1}
-                    max={5}
-                    value={savingsYears}
-                    onChange={(e) => setSavingsYears(Number(e.target.value))}
+                    max={60}
+                    value={savingsMonths}
+                    onChange={(e) => setSavingsMonths(Number(e.target.value))}
                     className="savings-slider"
+                    style={{
+                      background: `linear-gradient(to right, #4ade80 0%, #4ade80 ${((savingsMonths - 1) / 59) * 100}%, rgba(255,255,255,0.15) ${((savingsMonths - 1) / 59) * 100}%, rgba(255,255,255,0.15) 100%)`
+                    }}
                   />
-                  <div style={{ display: "flex", justifyContent: "space-between", marginTop: "0.4rem" }}>
-                    {[1, 2, 3, 4, 5].map((y) => (
-                      <span key={y} style={{ fontSize: "0.68rem", color: y === savingsYears ? "#4ade80" : "rgba(255,255,255,0.3)", fontWeight: y === savingsYears ? 700 : 400 }}>
-                        {y}yr
-                      </span>
-                    ))}
+                  <div style={{ position: "relative", height: "1.2rem", marginTop: "0.5rem" }}>
+                    {[1, 3, 6, 12, 18, 24, 36, 48, 60].map((m) => {
+                      const label = m < 12 ? `${m}m` : `${m / 12}y`;
+                      const tickLabel = m === 18 ? "18m" : label;
+                      const isSelected = m === savingsMonths;
+                      return (
+                        <span
+                          key={m}
+                          style={{
+                            position: "absolute",
+                            left: `${((m - 1) / 59) * 100}%`,
+                            transform: "translateX(-50%)",
+                            fontSize: "0.68rem",
+                            color: isSelected ? "#4ade80" : "rgba(255,255,255,0.3)",
+                            fontWeight: isSelected ? 700 : 400,
+                            cursor: "pointer",
+                            transition: "color 0.15s ease",
+                          }}
+                          onClick={() => setSavingsMonths(m)}
+                        >
+                          {tickLabel}
+                        </span>
+                      );
+                    })}
                   </div>
                 </div>
 
                 <div style={{ marginTop: "1.5rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
                   {[
-                    { label: "Best rate today", val: `₹${bestRate}/USD` },
-                    { label: "Worst rate today", val: `₹${worstRate}/USD` },
+                    { label: "Best rate today", val: `₹${(bestRate * (usdRates[currency] || 0)).toFixed(2)}/${currency}` },
+                    { label: "Worst rate today", val: `₹${(worstRate * (usdRates[currency] || 0)).toFixed(2)}/${currency}` },
                     { label: "Best provider", val: best.name },
                     { label: "Monthly savings", val: formatINR(Math.round((inrReceived(best) - inrReceived(worst)) / 100) * 100) },
                   ].map((stat) => (
