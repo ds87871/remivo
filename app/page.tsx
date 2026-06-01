@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { supabase } from "../lib/supabase";
+import Link from "next/link";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 interface Provider {
@@ -854,7 +855,7 @@ export default function Home() {
           </div>
 
           <div className="nav-desktop-actions" style={{ display: "flex", gap: 8, alignItems: "center" }}>
-            <button type="button" className="btn btn-ghost" onClick={() => alert("Login functionality coming soon.")}>Log in</button>
+            <Link href="/login" className="btn btn-ghost">Log in</Link>
             <button className="btn btn-primary" onClick={() => document.getElementById("compare")?.scrollIntoView({ behavior: "smooth" })}>Get started →</button>
           </div>
 
@@ -892,7 +893,7 @@ export default function Home() {
             </a>
           ))}
           <div style={{ marginTop: "1.5rem", display: "flex", flexDirection: "column", gap: 8 }}>
-            <button type="button" className="btn btn-outline" style={{ justifyContent: "center" }} onClick={() => alert("Login functionality coming soon.")}>Log in</button>
+            <Link href="/login" className="btn btn-outline" style={{ justifyContent: "center" }} onClick={() => setMenuOpen(false)}>Log in</Link>
             <button className="btn btn-primary btn-xl" style={{ justifyContent: "center" }} onClick={() => { setMenuOpen(false); document.getElementById("compare")?.scrollIntoView({ behavior: "smooth" }); }}>Get started</button>
           </div>
         </div>

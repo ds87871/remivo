@@ -22,6 +22,17 @@ export default function AdminClient({ leads }: { leads: any[] }) {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  const handleLogout = async () => {
+    try {
+      const res = await fetch("/api/auth/logout", { method: "POST" });
+      if (res.ok) {
+        window.location.href = "/login";
+      }
+    } catch (e) {
+      console.error("Logout failed:", e);
+    }
+  };
+
   const css = `
     @import url('https://fonts.googleapis.com/css2?family=Cabinet+Grotesk:wght@400;500;700;800&display=swap');
     
@@ -45,10 +56,14 @@ export default function AdminClient({ leads }: { leads: any[] }) {
     .admin-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.03em; margin: 0; display: flex; align-items: center; gap: 0.75rem; }
     .admin-badge { background: var(--green-light); color: var(--green-dark); padding: 0.25rem 0.75rem; border-radius: 100px; font-size: 0.875rem; font-weight: 700; }
     
-    .admin-search { position: relative; width: 100%; max-width: 400px; }
+    .header-actions { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+    .admin-search { position: relative; width: 100%; max-width: 320px; }
     .admin-search input { width: 100%; padding: 0.875rem 1rem 0.875rem 2.5rem; border-radius: 12px; border: 1px solid var(--border2); font-family: inherit; font-size: 0.95rem; outline: none; transition: all 0.2s; }
     .admin-search input:focus { border-color: var(--green); box-shadow: 0 0 0 3px rgba(18,183,106,0.1); }
     .admin-search svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--muted2); }
+
+    .logout-btn { background: none; border: 1px solid var(--border2); padding: 0.8rem 1.2rem; border-radius: 12px; cursor: pointer; font-family: inherit; font-size: 0.95rem; font-weight: 600; color: var(--muted); transition: all 0.2s; display: inline-flex; align-items: center; gap: 0.5rem; }
+    .logout-btn:hover { background: #fee2e2; border-color: #fca5a5; color: #b91c1c; }
 
     .table-wrapper { overflow-x: auto; border: 1px solid var(--border); border-radius: 16px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05); }
     table { width: 100%; border-collapse: collapse; text-align: left; white-space: nowrap; }
@@ -75,14 +90,20 @@ export default function AdminClient({ leads }: { leads: any[] }) {
             Remivo Admin
             <span className="admin-badge">{filteredLeads.length} Leads</span>
           </h1>
-          <div className="admin-search">
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
-            <input 
-              type="text" 
-              placeholder="Search by name, email, or WhatsApp..." 
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+          <div className="header-actions">
+            <div className="admin-search">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input 
+                type="text" 
+                placeholder="Search leads..." 
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
+            <button onClick={handleLogout} className="logout-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+              Logout
+            </button>
           </div>
         </header>
 
