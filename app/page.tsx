@@ -100,6 +100,8 @@ const CURRENCIES = [
   { code: "KWD", symbol: "د.ك", flag: "🇰🇼", label: "Kuwaiti Dinar" },
   { code: "OMR", symbol: "ر.ع", flag: "🇴🇲", label: "Omani Rial" },
   { code: "GBP", symbol: "£", flag: "🇬🇧", label: "British Pound" },
+  { code: "CAD", symbol: "CA$", flag: "🇨🇦", label: "Canadian Dollar" },
+  { code: "AUD", symbol: "A$", flag: "🇦🇺", label: "Australian Dollar" },
 ];
 
 const USD_RATES: Record<string, number> = {
@@ -110,6 +112,8 @@ const USD_RATES: Record<string, number> = {
   KWD: 3.25,
   OMR: 2.60,
   GBP: 1.27,
+  CAD: 0.73,
+  AUD: 0.66,
 };
 
 // ─── Utility ─────────────────────────────────────────────────────────────────
@@ -146,6 +150,121 @@ export default function Home() {
   const [alertSubmitted, setAlertSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+
+  const [usdRates, setUsdRates] = useState<Record<string, number>>({
+    USD: 1,
+    AED: 0.272,
+    SAR: 0.267,
+    QAR: 0.275,
+    KWD: 3.25,
+    OMR: 2.60,
+    GBP: 1.27,
+    CAD: 0.73,
+    AUD: 0.66,
+  });
+
+  const [providers, setProviders] = useState<Provider[]>([
+    {
+      id: "wise",
+      name: "Wise",
+      abbr: "W",
+      color: "#00B9FF",
+      gradient: "linear-gradient(135deg,#00B9FF,#0099dd)",
+      rate: 83.47,
+      fee: 0,
+      time: "Instant",
+      badge: "Best Value",
+      badgeType: "best",
+      rating: 4.8,
+      reviews: "2.1M",
+    },
+    {
+      id: "remitly",
+      name: "Remitly",
+      abbr: "R",
+      color: "#FF6B35",
+      gradient: "linear-gradient(135deg,#FF6B35,#e5501a)",
+      rate: 83.12,
+      fee: 2.99,
+      time: "3 min",
+      badge: "Most Used",
+      badgeType: "fast",
+      rating: 4.5,
+      reviews: "890K",
+    },
+    {
+      id: "paysend",
+      name: "PaySend",
+      abbr: "P",
+      color: "#7C3AED",
+      gradient: "linear-gradient(135deg,#7C3AED,#6025c9)",
+      rate: 83.05,
+      fee: 1.99,
+      time: "5 min",
+      badge: "Low Fee",
+      badgeType: "cheap",
+      rating: 4.3,
+      reviews: "340K",
+    },
+    {
+      id: "wu",
+      name: "Western Union",
+      abbr: "WU",
+      textColor: "#000",
+      color: "#FFCC00",
+      gradient: "linear-gradient(135deg,#FFCC00,#e5b800)",
+      rate: 82.10,
+      fee: 4.99,
+      time: "10 min",
+      rating: 3.9,
+      reviews: "5.2M",
+    },
+    {
+      id: "xoom",
+      name: "Xoom",
+      abbr: "X",
+      color: "#0070E0",
+      gradient: "linear-gradient(135deg,#0070E0,#005ab8)",
+      rate: 82.55,
+      fee: 3.49,
+      time: "1 hour",
+      rating: 4.1,
+      reviews: "1.2M",
+    },
+  ]);
+
+  useEffect(() => {
+    async function loadRates() {
+      try {
+        const res = await fetch("/api/rates");
+        if (res.ok) {
+          const data = await res.json();
+          if (data.USD_RATES) {
+            setUsdRates(data.USD_RATES);
+          }
+          if (data.USD_to_INR) {
+            const baseInr = data.USD_to_INR;
+            setProviders(prev => prev.map(p => {
+              let factor = 1.0;
+              if (p.id === "wise") factor = 1.00;
+              else if (p.id === "remitly") factor = 0.9958;
+              else if (p.id === "paysend") factor = 0.9950;
+              else if (p.id === "wu") factor = 0.9836;
+              else if (p.id === "xoom") factor = 0.9890;
+              
+              return {
+                ...p,
+                rate: parseFloat((baseInr * factor).toFixed(2))
+              };
+            }));
+          }
+        }
+      } catch (err) {
+        console.error("Failed to load live exchange rates:", err);
+      }
+    }
+    loadRates();
+  }, []);
 
   const handleAlertSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -197,16 +316,16 @@ export default function Home() {
   }, []);
 
   const cur = CURRENCIES.find((c) => c.code === currency)!;
-  const usdAmount = parseFloat(amount || "0") * USD_RATES[currency];
-  const bestRate = Math.max(...PROVIDERS.map((p) => p.rate));
-  const worstRate = Math.min(...PROVIDERS.map((p) => p.rate));
+  const usdAmount = parseFloat(amount || "0") * (usdRates[currency] || 0);
+  const bestRate = Math.max(...providers.map((p) => p.rate));
+  const worstRate = Math.min(...providers.map((p) => p.rate));
 
   function inrReceived(p: Provider) {
     const net = usdAmount - p.fee;
     return Math.max(0, net * p.rate);
   }
 
-  const sorted = [...PROVIDERS].sort((a, b) => inrReceived(b) - inrReceived(a));
+  const sorted = [...providers].sort((a, b) => inrReceived(b) - inrReceived(a));
   const best = sorted[0];
   const worst = sorted[sorted.length - 1];
   const annualSaving = (inrReceived(best) - inrReceived(worst)) * 12 * savingsYears;
