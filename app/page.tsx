@@ -151,10 +151,84 @@ export default function Home() {
   const [scrolled, setScrolled] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   
-  const [alertForm, setAlertForm] = useState({ name: "", email: "", phone: "", country: "", currency: "AED" });
+  const [alertForm, setAlertForm] = useState({ name: "", email: "", phone: "+971 ", country: "UAE", currency: "AED" });
   const [alertSubmitted, setAlertSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
+
+  const COUNTRY_DATA: Record<string, { phoneCode: string; currency: string }> = {
+    "UAE": { phoneCode: "+971", currency: "AED" },
+    "Saudi Arabia": { phoneCode: "+966", currency: "SAR" },
+    "Qatar": { phoneCode: "+974", currency: "QAR" },
+    "Kuwait": { phoneCode: "+965", currency: "KWD" },
+    "Oman": { phoneCode: "+968", currency: "OMR" },
+    "India": { phoneCode: "+91", currency: "USD" },
+    "UK": { phoneCode: "+44", currency: "GBP" },
+    "USA": { phoneCode: "+1", currency: "USD" },
+    "Canada": { phoneCode: "+1", currency: "CAD" },
+    "Australia": { phoneCode: "+61", currency: "AUD" }
+  };
+
+  const handleCountryChange = (newCountry: string) => {
+    const data = COUNTRY_DATA[newCountry];
+    let newPhone = alertForm.phone;
+    let newCurrency = alertForm.currency;
+
+    if (data) {
+      newCurrency = data.currency;
+      
+      const currentPrefixMatch = alertForm.phone.match(/^\+\d+/);
+      if (currentPrefixMatch) {
+        const currentPrefix = currentPrefixMatch[0];
+        const restOfPhone = alertForm.phone.slice(currentPrefix.length).trim();
+        newPhone = `${data.phoneCode} ${restOfPhone}`.trim();
+      } else {
+        newPhone = `${data.phoneCode} ${alertForm.phone}`.trim();
+      }
+    }
+
+    setAlertForm({
+      ...alertForm,
+      country: newCountry,
+      currency: newCurrency,
+      phone: newPhone
+    });
+  };
+
+  useEffect(() => {
+    async function detectCountry() {
+      try {
+        const res = await fetch("https://ipapi.co/json/");
+        if (res.ok) {
+          const data = await res.json();
+          let countryKey = "";
+          if (data.country_name === "United Arab Emirates") countryKey = "UAE";
+          else if (data.country_name === "Saudi Arabia") countryKey = "Saudi Arabia";
+          else if (data.country_name === "Qatar") countryKey = "Qatar";
+          else if (data.country_name === "Kuwait") countryKey = "Kuwait";
+          else if (data.country_name === "Oman") countryKey = "Oman";
+          else if (data.country_name === "India") countryKey = "India";
+          else if (data.country_name === "United Kingdom") countryKey = "UK";
+          else if (data.country_name === "United States") countryKey = "USA";
+          else if (data.country_name === "Canada") countryKey = "Canada";
+          else if (data.country_name === "Australia") countryKey = "Australia";
+
+          if (countryKey && COUNTRY_DATA[countryKey]) {
+            const countryInfo = COUNTRY_DATA[countryKey];
+            setAlertForm(prev => ({
+              ...prev,
+              country: countryKey,
+              currency: countryInfo.currency,
+              phone: countryInfo.phoneCode + " "
+            }));
+          }
+        }
+      } catch (e) {
+        console.error("Geocoding failed, keeping defaults:", e);
+      }
+    }
+    detectCountry();
+  }, []);
 
   const [usdRates, setUsdRates] = useState<Record<string, number>>({
     USD: 1,
@@ -1674,8 +1748,39 @@ export default function Home() {
                 <div className="alert-row">
                   <div className="alert-input-group">
                     <label className="alert-label">Country of Residence</label>
-                    <input required type="text" className="alert-input" placeholder="e.g. UAE" value={alertForm.country} onChange={(e) => setAlertForm({...alertForm, country: e.target.value})} />
+                    <select 
+                      required 
+                      className="alert-input" 
+                      value={Object.keys(COUNTRY_DATA).includes(alertForm.country) ? alertForm.country : (alertForm.country === "" ? "" : "Other")} 
+                      onChange={(e) => {
+                        const val = e.target.value;
+                        if (val === "Other") {
+                          setAlertForm({...alertForm, country: ""});
+                        } else {
+                          handleCountryChange(val);
+                        }
+                      }}
+                    >
+                      <option value="">Select country...</option>
+                      {Object.keys(COUNTRY_DATA).map(c => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                      <option value="Other">Other...</option>
+                    </select>
                   </div>
+                  {(!Object.keys(COUNTRY_DATA).includes(alertForm.country) || alertForm.country === "") && (
+                    <div className="alert-input-group">
+                      <label className="alert-label">Manual Country</label>
+                      <input 
+                        required 
+                        type="text" 
+                        className="alert-input" 
+                        placeholder="e.g. Germany" 
+                        value={alertForm.country} 
+                        onChange={(e) => setAlertForm({...alertForm, country: e.target.value})} 
+                      />
+                    </div>
+                  )}
                   <div className="alert-input-group">
                     <label className="alert-label">Sending Currency</label>
                     <select className="alert-input" value={alertForm.currency} onChange={(e) => setAlertForm({...alertForm, currency: e.target.value})}>
