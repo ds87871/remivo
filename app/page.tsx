@@ -745,36 +745,32 @@ export default function Home() {
       outline: none; cursor: pointer; transition: background 0.2s ease;
     }
     .savings-slider::-webkit-slider-thumb {
-      -webkit-appearance: none; width: 22px; height: 22px;
-      border-radius: 50%; background: #4ade80;
-      cursor: pointer; box-shadow: 0 0 12px rgba(74,222,128,0.5);
-      transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.1s ease;
+      -webkit-appearance: none; width: 24px; height: 24px;
+      border-radius: 50%; background: #ffffff;
+      cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 0 3px rgba(74,222,128,0.25);
+      transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.1s ease;
     }
     .savings-slider::-webkit-slider-thumb:hover {
-      transform: scale(1.2);
-      background: #34d399;
-      box-shadow: 0 0 16px rgba(52,211,153,0.7);
+      transform: scale(1.15);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4), 0 0 0 5px rgba(74,222,128,0.4);
     }
     .savings-slider::-webkit-slider-thumb:active {
-      transform: scale(1.3);
-      background: #059669;
-      box-shadow: 0 0 20px rgba(5,150,105,0.9);
+      transform: scale(0.95);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5), 0 0 0 6px rgba(74,222,128,0.55);
     }
     .savings-slider::-moz-range-thumb {
-      width: 22px; height: 22px; border: none;
-      border-radius: 50%; background: #4ade80;
-      cursor: pointer; box-shadow: 0 0 12px rgba(74,222,128,0.5);
-      transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.1s ease;
+      width: 24px; height: 24px; border: none;
+      border-radius: 50%; background: #ffffff;
+      cursor: pointer; box-shadow: 0 4px 12px rgba(0,0,0,0.3), 0 0 0 3px rgba(74,222,128,0.25);
+      transition: transform 0.1s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.1s ease;
     }
     .savings-slider::-moz-range-thumb:hover {
-      transform: scale(1.2);
-      background: #34d399;
-      box-shadow: 0 0 16px rgba(52,211,153,0.7);
+      transform: scale(1.15);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.4), 0 0 0 5px rgba(74,222,128,0.4);
     }
     .savings-slider::-moz-range-thumb:active {
-      transform: scale(1.3);
-      background: #059669;
-      box-shadow: 0 0 20px rgba(5,150,105,0.9);
+      transform: scale(0.95);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.5), 0 0 0 6px rgba(74,222,128,0.55);
     }
 
     /* ── How it works ── */
@@ -1353,42 +1349,43 @@ export default function Home() {
               <div className="savings-orb savings-orb-2" />
               <div style={{ position: "relative" }}>
                 <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.8rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5rem" }}>
-                  You could save
+                  Estimated Savings
                 </p>
                 <div className="savings-big">
                   {formatINR(Math.round(animatedSavings / 100) * 100)}
                 </div>
                 <p style={{ color: "#86efac", fontSize: "0.875rem", marginTop: "0.3rem" }}>
-                  over {(() => {
-                    if (savingsMonths === 1) return "1 month";
-                    if (savingsMonths < 12) return `${savingsMonths} months`;
-                    if (savingsMonths === 12) return "1 year";
-                    if (savingsMonths === 18) return "18 months";
-                    if (savingsMonths % 12 === 0) {
-                      const yrs = savingsMonths / 12;
-                      return `${yrs} ${yrs === 1 ? "year" : "years"}`;
-                    }
-                    return `${savingsMonths} months`;
-                  })()} by switching providers
+                  saved in total by switching providers
                 </p>
 
                 <div style={{ marginTop: "2rem", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "1.5rem" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.75rem" }}>
-                    <span style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.8rem" }}>Sending {formatCurrency(amount, currency)} / month</span>
-                    <span style={{ color: "#4ade80", fontWeight: 700, fontSize: "0.8rem" }}>
-                      {(() => {
-                        if (savingsMonths === 1) return "1 month";
-                        if (savingsMonths < 12) return `${savingsMonths} months`;
-                        if (savingsMonths === 12) return "1 year";
-                        if (savingsMonths === 18) return "18 months";
-                        if (savingsMonths % 12 === 0) {
-                          const yrs = savingsMonths / 12;
-                          return `${yrs} ${yrs === 1 ? "year" : "years"}`;
-                        }
-                        return `${savingsMonths} months`;
-                      })()}
-                    </span>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "1rem" }}>
+                    <div>
+                      <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.25rem" }}>Duration</div>
+                      <div style={{ color: "#fff", fontWeight: 800, fontSize: "1.75rem", fontFamily: "'Cabinet Grotesk', sans-serif", lineHeight: 1.1 }}>
+                        {(() => {
+                          if (savingsMonths === 1) return "1 month";
+                          if (savingsMonths < 12) return `${savingsMonths} months`;
+                          if (savingsMonths === 12) return "1 year";
+                          if (savingsMonths === 18) return "18 months";
+                          if (savingsMonths % 12 === 0) {
+                            const yrs = savingsMonths / 12;
+                            return `${yrs} ${yrs === 1 ? "year" : "years"}`;
+                          }
+                          if (savingsMonths > 12) {
+                            const yrs = (savingsMonths / 12).toFixed(1);
+                            return `${yrs.endsWith('.0') ? yrs.slice(0, -2) : yrs} years`;
+                          }
+                          return `${savingsMonths} months`;
+                        })()}
+                      </div>
+                    </div>
+                    <div style={{ textAlign: "right" }}>
+                      <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.25rem" }}>Sending</div>
+                      <div style={{ color: "#4ade80", fontWeight: 700, fontSize: "0.95rem" }}>{formatCurrency(amount, currency)} / mo</div>
+                    </div>
                   </div>
+
                   <input
                     type="range"
                     min={1}
@@ -1400,43 +1397,54 @@ export default function Home() {
                       background: `linear-gradient(to right, #4ade80 0%, #4ade80 ${((savingsMonths - 1) / 59) * 100}%, rgba(255,255,255,0.15) ${((savingsMonths - 1) / 59) * 100}%, rgba(255,255,255,0.15) 100%)`
                     }}
                   />
-                  <div style={{ position: "relative", height: "1.2rem", marginTop: "0.5rem" }}>
-                    {[1, 3, 6, 12, 18, 24, 36, 48, 60].map((m) => {
-                      const label = m < 12 ? `${m}m` : `${m / 12}y`;
-                      const tickLabel = m === 18 ? "18m" : label;
-                      const isSelected = m === savingsMonths;
-                      return (
-                        <span
-                          key={m}
-                          style={{
-                            position: "absolute",
-                            left: `${((m - 1) / 59) * 100}%`,
-                            transform: "translateX(-50%)",
-                            fontSize: "0.68rem",
-                            color: isSelected ? "#4ade80" : "rgba(255,255,255,0.3)",
-                            fontWeight: isSelected ? 700 : 400,
-                            cursor: "pointer",
-                            transition: "color 0.15s ease",
-                          }}
-                          onClick={() => setSavingsMonths(m)}
-                        >
-                          {tickLabel}
-                        </span>
-                      );
-                    })}
-                  </div>
+                  
+                  <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.75rem", marginTop: "0.75rem", textAlign: "center" }}>
+                    Drag to estimate long-term savings
+                  </p>
                 </div>
 
-                <div style={{ marginTop: "1.5rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
+                <div style={{ marginTop: "2rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
                   {[
-                    { label: "Best rate today", val: `₹${(bestRate * (usdRates[currency] || 0)).toFixed(2)}/${currency}` },
-                    { label: "Worst rate today", val: `₹${(worstRate * (usdRates[currency] || 0)).toFixed(2)}/${currency}` },
-                    { label: "Best provider", val: best.name },
                     { label: "Monthly savings", val: formatINR(Math.round((inrReceived(best) - inrReceived(worst)) / 100) * 100) },
+                    { label: "Annual savings", val: formatINR(Math.round(((inrReceived(best) - inrReceived(worst)) * 12) / 100) * 100) },
+                    { 
+                      label: `Total savings over ${(() => {
+                        if (savingsMonths === 1) return "1 month";
+                        if (savingsMonths < 12) return `${savingsMonths} months`;
+                        if (savingsMonths === 12) return "1 year";
+                        if (savingsMonths === 18) return "18 months";
+                        if (savingsMonths % 12 === 0) return `${savingsMonths / 12} years`;
+                        return `${savingsMonths} months`;
+                      })()}`, 
+                      val: formatINR(Math.round(totalSavings / 100) * 100), 
+                      highlight: true 
+                    },
+                    { label: "Best provider", val: best.name },
                   ].map((stat) => (
-                    <div key={stat.label} style={{ background: "rgba(255,255,255,0.07)", borderRadius: 12, padding: "0.75rem" }}>
+                    <div 
+                      key={stat.label} 
+                      style={{ 
+                        background: stat.highlight ? "rgba(74,222,128,0.08)" : "rgba(255,255,255,0.04)", 
+                        border: stat.highlight ? "1px solid rgba(74,222,128,0.2)" : "1px solid rgba(255,255,255,0.05)",
+                        borderRadius: 16, 
+                        padding: "1rem",
+                        gridColumn: stat.highlight ? "span 2" : "auto"
+                      }}
+                    >
+                      <div style={{ fontSize: "0.72rem", color: stat.highlight ? "#86efac" : "rgba(255,255,255,0.45)", fontWeight: 500, marginBottom: 4 }}>{stat.label}</div>
+                      <div style={{ fontWeight: 800, color: stat.highlight ? "#4ade80" : "#fff", fontSize: stat.highlight ? "1.4rem" : "1.05rem", fontFamily: "'Cabinet Grotesk', sans-serif" }}>{stat.val}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div style={{ marginTop: "1.5rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem" }}>
+                  {[
+                    { label: "Best provider rate", val: `₹${(bestRate * (usdRates[currency] || 0)).toFixed(2)}/${currency}` },
+                    { label: "Worst provider rate", val: `₹${(worstRate * (usdRates[currency] || 0)).toFixed(2)}/${currency}` },
+                  ].map((stat) => (
+                    <div key={stat.label}>
                       <div style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.4)", marginBottom: 2 }}>{stat.label}</div>
-                      <div style={{ fontWeight: 700, color: "#fff", fontSize: "0.9rem" }}>{stat.val}</div>
+                      <div style={{ fontWeight: 600, color: "rgba(255,255,255,0.9)", fontSize: "0.85rem" }}>{stat.val}</div>
                     </div>
                   ))}
                 </div>
