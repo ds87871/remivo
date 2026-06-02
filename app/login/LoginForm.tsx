@@ -40,8 +40,8 @@ export default function LoginForm() {
   return (
     <div className="w-full max-w-md p-8 bg-slate-900/80 backdrop-blur-md rounded-2xl border border-slate-800 shadow-2xl">
       <div className="text-center mb-8">
-        <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-gradient-to-tr from-blue-600 to-indigo-600 text-white font-bold text-xl mb-4 shadow-lg shadow-indigo-500/30">
-          R
+        <div className="inline-flex items-center justify-center mb-4">
+          <img src="/logo-mark.png" alt="Remivo Logo" className="w-12 h-12 drop-shadow-lg" />
         </div>
         <h2 className="text-2xl font-bold text-white tracking-tight">Welcome back</h2>
         <p className="text-slate-400 text-sm mt-1">Sign in to access your Remivo dashboard</p>

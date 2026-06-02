@@ -1121,13 +1121,7 @@ export default function Home() {
       <nav className={`nav${scrolled ? " scrolled" : ""}`}>
         <div className="nav-inner">
           <a href="#" className="logo">
-            <div className="logo-mark" style={{ background: "linear-gradient(135deg, #4f46e5, #3b82f6)", width: 34, height: 34, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(79,70,229,0.2)" }}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ margin: "auto" }}>
-                <path d="M4 12C4 7.58 7.58 4 12 4C14.5 4 16.8 5.1 18.3 7M20 12C20 16.42 16.42 20 12 20C9.5 20 7.2 18.9 5.7 17" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-                <path d="M12 8L16 12L12 16" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-            </div>
-            <span style={{ fontSize: "1.25rem", fontWeight: 800, letterSpacing: "-0.03em" }}>Remivo</span>
+            <img src="/logo-light.png" alt="Remivo" style={{ height: 28, width: "auto" }} />
           </a>
 
           <div className="nav-links">
@@ -1166,6 +1160,9 @@ export default function Home() {
 
       {menuOpen && (
         <div className="mobile-menu">
+          <div style={{ padding: "0 1rem 1.5rem", borderBottom: "1px solid rgba(255,255,255,0.05)", marginBottom: "1.5rem" }}>
+            <img src="/logo-mark.png" alt="Remivo" style={{ height: 32, width: "auto" }} />
+          </div>
           {["Compare", "How it works", "Savings"].map((item) => (
             <a
               key={item}
@@ -1977,13 +1974,7 @@ export default function Home() {
           <div className="footer-grid">
             <div>
               <div className="footer-logo">
-                <div className="logo-mark" style={{ background: "linear-gradient(135deg, #4f46e5, #3b82f6)", width: 34, height: 34, borderRadius: 10, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 4px 12px rgba(79,70,229,0.2)" }}>
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ margin: "auto" }}>
-                    <path d="M4 12C4 7.58 7.58 4 12 4C14.5 4 16.8 5.1 18.3 7M20 12C20 16.42 16.42 20 12 20C9.5 20 7.2 18.9 5.7 17" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
-                    <path d="M12 8L16 12L12 16" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </div>
-                <span style={{ fontSize: "1.25rem", fontWeight: 800, letterSpacing: "-0.03em" }}>Remivo</span>
+                <img src="/logo-light.png" alt="Remivo" style={{ height: 32, width: "auto", marginBottom: 8 }} />
               </div>
               <p className="footer-desc">
                 Remivo helps overseas Indians compare remittance
