@@ -1121,7 +1121,7 @@ export default function Home() {
       <nav className={`nav${scrolled ? " scrolled" : ""}`}>
         <div className="nav-inner">
           <a href="#" className="logo">
-            <img src={scrolled ? "/logo-dark.svg" : "/logo-light.svg"} alt="Remivo" style={{ height: 28, width: "auto" }} />
+            <img src={scrolled ? "/logo-light.svg" : "/logo-dark.svg"} alt="Remivo" style={{ height: 28, width: "auto" }} />
           </a>
 
           <div className="nav-links">
@@ -1161,7 +1161,7 @@ export default function Home() {
       {menuOpen && (
         <div className="mobile-menu">
           <div style={{ padding: "0 1rem 1.5rem", borderBottom: "1px solid rgba(0,0,0,0.05)", marginBottom: "1.5rem" }}>
-            <img src="/logo-dark.svg" alt="Remivo" style={{ height: 32, width: "auto" }} />
+            <img src="/logo-light.svg" alt="Remivo" style={{ height: 32, width: "auto" }} />
           </div>
           {["Compare", "How it works", "Savings"].map((item) => (
             <a
@@ -1982,7 +1982,7 @@ export default function Home() {
           <div className="footer-grid">
             <div>
               <div className="footer-logo">
-                <img src="/logo-light.svg" alt="Remivo" style={{ height: 32, width: "auto", marginBottom: 8 }} />
+                <img src="/logo-dark.svg" alt="Remivo" style={{ height: 32, width: "auto", marginBottom: 8 }} />
               </div>
               <p className="footer-desc">
                 Remivo helps overseas Indians compare remittance
