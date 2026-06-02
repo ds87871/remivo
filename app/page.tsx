@@ -1103,13 +1103,13 @@ export default function Home() {
       background: rgba(244,247,244,0.97);
       backdrop-filter: blur(20px);
       display: flex; flex-direction: column;
-      padding: 90px 2rem 2rem;
-      gap: 0.5rem;
+      padding: 80px 1.5rem 2rem;
+      gap: 0;
     }
     .mobile-nav-link {
-      font-size: 1.25rem; font-family: 'Cabinet Grotesk', sans-serif; font-weight: 700;
-      color: var(--ink); text-decoration: none; padding: 0.75rem 0;
-      border-bottom: 1px solid var(--border2); display: block;
+      font-size: 1.5rem; font-family: 'Cabinet Grotesk', sans-serif; font-weight: 700;
+      color: var(--ink); text-decoration: none; padding: 1.25rem 0;
+      border-bottom: 1px solid rgba(0,0,0,0.05); display: block;
     }
   `;
 
@@ -1160,9 +1160,6 @@ export default function Home() {
 
       {menuOpen && (
         <div className="mobile-menu">
-          <div style={{ padding: "0 1rem 1.5rem", borderBottom: "1px solid rgba(0,0,0,0.05)", marginBottom: "1.5rem" }}>
-            <img src="/logo-light.svg" alt="Remivo" style={{ height: 32, width: "auto" }} />
-          </div>
           {["Compare", "How it works", "Savings"].map((item) => (
             <a
               key={item}
@@ -1173,9 +1170,9 @@ export default function Home() {
               {item}
             </a>
           ))}
-          <div style={{ marginTop: "1.5rem", display: "flex", flexDirection: "column", gap: 8 }}>
-            <Link href="/login" className="btn btn-outline" style={{ justifyContent: "center" }} onClick={() => setMenuOpen(false)}>Log in</Link>
-            <button className="btn btn-primary btn-xl" style={{ justifyContent: "center" }} onClick={() => { setMenuOpen(false); document.getElementById("compare")?.scrollIntoView({ behavior: "smooth" }); }}>Get started</button>
+          <Link href="/login" className="mobile-nav-link" onClick={() => setMenuOpen(false)}>Log in</Link>
+          <div style={{ marginTop: "2.5rem", display: "flex", flexDirection: "column" }}>
+            <button className="btn btn-primary btn-xl" style={{ justifyContent: "center", width: "100%", padding: "1.25rem", fontSize: "1.125rem", borderRadius: "16px" }} onClick={() => { setMenuOpen(false); document.getElementById("compare")?.scrollIntoView({ behavior: "smooth" }); }}>Get started</button>
           </div>
         </div>
       )}
