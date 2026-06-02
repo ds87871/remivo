@@ -121,6 +121,11 @@ const USD_RATES: Record<string, number> = {
 function formatINR(n: number) {
   return "₹" + n.toLocaleString("en-IN", { maximumFractionDigits: 0 });
 }
+function formatCompactINR(n: number) {
+  if (n >= 1000000) return "₹" + (n / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+  if (n >= 1000) return "₹" + (n / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+  return "₹" + n.toLocaleString("en-IN", { maximumFractionDigits: 0 });
+}
 function formatCurrency(amountVal: number | string, curCode: string) {
   const numericAmount = typeof amountVal === "string" ? parseFloat(amountVal || "0") : amountVal;
   return curCode + " " + numericAmount.toLocaleString(undefined, { maximumFractionDigits: 0 });
@@ -151,7 +156,21 @@ export default function Home() {
   const [animatedSavings, setAnimatedSavings] = useState(0);
   const [scrolled, setScrolled] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
-  
+
+  const [routeIndex, setRouteIndex] = useState(0);
+  const routes = [
+    { title: "UAE ➔ India", rate: "₹22.74", time: "(Refreshed)" },
+    { title: "USA ➔ India", rate: "₹83.47", time: "(Live)" },
+    { title: "UK ➔ India", rate: "₹105.82", time: "(Live)" },
+  ];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setRouteIndex((prev) => (prev + 1) % routes.length);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, []);
+
   const [alertForm, setAlertForm] = useState({ name: "", email: "", phone: "+971 ", country: "UAE", currency: "AED" });
   const [alertSubmitted, setAlertSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -198,34 +217,66 @@ export default function Home() {
 
   useEffect(() => {
     async function detectCountry() {
-      try {
-        const res = await fetch("https://ipapi.co/json/");
-        if (res.ok) {
-          const data = await res.json();
-          let countryKey = "";
-          if (data.country_name === "United Arab Emirates") countryKey = "UAE";
-          else if (data.country_name === "Saudi Arabia") countryKey = "Saudi Arabia";
-          else if (data.country_name === "Qatar") countryKey = "Qatar";
-          else if (data.country_name === "Kuwait") countryKey = "Kuwait";
-          else if (data.country_name === "Oman") countryKey = "Oman";
-          else if (data.country_name === "India") countryKey = "India";
-          else if (data.country_name === "United Kingdom") countryKey = "UK";
-          else if (data.country_name === "United States") countryKey = "USA";
-          else if (data.country_name === "Canada") countryKey = "Canada";
-          else if (data.country_name === "Australia") countryKey = "Australia";
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 4000); // 4s timeout
 
-          if (countryKey && COUNTRY_DATA[countryKey]) {
-            const countryInfo = COUNTRY_DATA[countryKey];
-            setAlertForm(prev => ({
-              ...prev,
-              country: countryKey,
-              currency: countryInfo.currency,
-              phone: countryInfo.phoneCode + " "
-            }));
+      try {
+        const res = await fetch("/api/location", { 
+          signal: controller.signal,
+          headers: { "Accept": "application/json" }
+        });
+        clearTimeout(timeoutId);
+
+        if (!res.ok) {
+          if (process.env.NODE_ENV === "development") {
+            console.warn(`[Geolocation] Gracefully skipping detection. API returned status: ${res.status}. (Possible causes: 429 Rate Limit, 403 Forbidden, 500 Server Error)`);
           }
+          setAlertForm(prev => ({ ...prev, country: "UAE", currency: "AED", phone: "+971 " }));
+          return;
+        }
+
+        const data = await res.json();
+        if (!data || data.error || !data.country_name) {
+          if (process.env.NODE_ENV === "development") {
+            console.warn(`[Geolocation] Gracefully skipping detection. Invalid payload: ${data?.error || "Unknown"}`);
+          }
+          setAlertForm(prev => ({ ...prev, country: "UAE", currency: "AED", phone: "+971 " }));
+          return;
+        }
+
+        let countryKey = "";
+        if (data.country_name === "United Arab Emirates") countryKey = "UAE";
+        else if (data.country_name === "Saudi Arabia") countryKey = "Saudi Arabia";
+        else if (data.country_name === "Qatar") countryKey = "Qatar";
+        else if (data.country_name === "Kuwait") countryKey = "Kuwait";
+        else if (data.country_name === "Oman") countryKey = "Oman";
+        else if (data.country_name === "India") countryKey = "India";
+        else if (data.country_name === "United Kingdom") countryKey = "UK";
+        else if (data.country_name === "United States") countryKey = "USA";
+        else if (data.country_name === "Canada") countryKey = "Canada";
+        else if (data.country_name === "Australia") countryKey = "Australia";
+
+        if (countryKey && COUNTRY_DATA[countryKey]) {
+          const countryInfo = COUNTRY_DATA[countryKey];
+          setAlertForm(prev => ({
+            ...prev,
+            country: countryKey,
+            currency: countryInfo.currency,
+            phone: countryInfo.phoneCode + " "
+          }));
         }
       } catch (e) {
-        console.error("Geocoding failed, keeping defaults:", e);
+        clearTimeout(timeoutId);
+        if (process.env.NODE_ENV === "development") {
+          console.warn("[Geolocation] Network error or timeout. Gracefully falling back to UAE default.", e);
+        }
+        // Robust fallback to defaults on any failure
+        setAlertForm(prev => ({
+          ...prev,
+          country: "UAE",
+          currency: "AED",
+          phone: "+971 "
+        }));
       }
     }
     detectCountry();
@@ -519,12 +570,12 @@ export default function Home() {
             </div>
 
             <h1 className="hero-h1">
-              Compare exchange rates<br />
-              <em>to India. Independently.</em>
+              Find the best exchange rates<br />
+              <em>to India. Instantly.</em>
             </h1>
 
             <p className="hero-sub">
-              We are not a provider. We are an independent platform helping you track real exchange rates, uncover hidden fees, and compare providers in real-time.
+              Compare Wise, Remitly, Western Union, Xoom and more in one place. See live rates, uncover hidden fees and send more money home.
             </p>
 
             <div className="hero-ctas">
@@ -570,8 +621,8 @@ export default function Home() {
               animation: "fadeUp 0.8s 0.3s ease both"
             }}>
               <span style={{ fontSize: "0.68rem", fontWeight: 700, color: "#818cf8", letterSpacing: "0.05em", textTransform: "uppercase" }}>Live Transfer Route</span>
-              <span style={{ fontSize: "1.1rem", fontWeight: 800, color: "#fff" }}>UAE ➔ India</span>
-              <span style={{ fontSize: "0.85rem", fontWeight: 500, color: "var(--green)" }}>Live Rate: ₹22.74 <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.4)" }}>(Refreshed)</span></span>
+              <span key={routes[routeIndex].title + "title"} style={{ fontSize: "1.1rem", fontWeight: 800, color: "#fff", animation: "fadeUp 0.3s ease" }}>{routes[routeIndex].title}</span>
+              <span key={routes[routeIndex].title + "rate"} style={{ fontSize: "0.85rem", fontWeight: 500, color: "var(--green)", animation: "fadeUp 0.3s ease" }}>Live Rate: {routes[routeIndex].rate} <span style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.4)" }}>{routes[routeIndex].time}</span></span>
             </div>
 
             <svg viewBox="0 0 500 400" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: "100%", maxWidth: 460, height: "auto", background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", borderRadius: "24px", padding: "1.5rem", boxShadow: "0 24px 80px rgba(0,0,0,0.3)" }}>
@@ -631,6 +682,20 @@ export default function Home() {
               <path d="M 60 160 Q 150 220 280 240" stroke="rgba(255,255,255,0.06)" strokeWidth="1.5" fill="none"/>
               <path d="M 60 160 Q 150 220 280 240" stroke="url(#flow-grad)" strokeWidth="2.5" fill="none" strokeDasharray="30, 150" className="pulse-path" style={{ animationDelay: "-1.5s" }}/>
             </svg>
+          </div>
+        </div>
+      </section>
+
+      {/* ── TRUST ROW ─────────────────────────────────────────────────── */}
+      <section style={{ background: "#F8FAFC", borderTop: "1px solid rgba(0,0,0,0.05)", borderBottom: "1px solid rgba(0,0,0,0.05)", padding: "2rem 0", overflow: "hidden" }}>
+        <div style={{ maxWidth: 1200, margin: "0 auto", padding: "0 1.5rem", display: "flex", flexDirection: "column", alignItems: "center", gap: "1.5rem" }}>
+          <span style={{ fontSize: "0.75rem", fontWeight: 700, color: "var(--muted)", textTransform: "uppercase", letterSpacing: "0.05em" }}>Comparing Live Rates From</span>
+          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "3rem", alignItems: "center", opacity: 0.5, filter: "grayscale(100%)" }}>
+            <span style={{ fontSize: "1.5rem", fontWeight: 800, fontFamily: "sans-serif", letterSpacing: "-0.02em" }}>Wise</span>
+            <span style={{ fontSize: "1.5rem", fontWeight: 700, fontFamily: "serif", fontStyle: "italic", letterSpacing: "-0.02em" }}>Remitly</span>
+            <span style={{ fontSize: "1.2rem", fontWeight: 800, fontFamily: "sans-serif", textTransform: "uppercase", letterSpacing: "-0.02em" }}>Western Union</span>
+            <span style={{ fontSize: "1.5rem", fontWeight: 800, fontFamily: "sans-serif", letterSpacing: "0.05em" }}>XOOM</span>
+            <span style={{ fontSize: "1.5rem", fontWeight: 800, fontFamily: "sans-serif" }}>PaySend</span>
           </div>
         </div>
       </section>
@@ -851,7 +916,7 @@ export default function Home() {
       {/* ── SAVINGS CALCULATOR ──────────────────────────────────────────── */}
       <section id="savings" className="section savings-section">
         <div className="section-inner">
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(280px, 1fr))", gap: "2.5rem", alignItems: "center" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1.3fr 0.7fr", gap: "3.5rem", alignItems: "center" }}>
             <div>
               <span className="section-label">Savings Calculator</span>
               <h2 className="section-h2" style={{ marginTop: "0.5rem" }}>
@@ -881,41 +946,41 @@ export default function Home() {
               <div className="savings-orb savings-orb-1" />
               <div className="savings-orb savings-orb-2" />
               <div style={{ position: "relative" }}>
-                <p style={{ color: "rgba(255,255,255,0.55)", fontSize: "0.8rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5rem" }}>
-                  Estimated Savings
-                </p>
-                <div className="savings-big">
-                  {formatINR(Math.round(animatedSavings / 100) * 100)}
+                {/* ── PRIMARY: Savings Value ── */}
+                <div style={{ marginBottom: "2.5rem" }}>
+                  <p style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem", fontWeight: 700, letterSpacing: "0.1em", textTransform: "uppercase", marginBottom: "0.5rem" }}>
+                    Estimated Savings
+                  </p>
+                  <div className="savings-big" style={{ whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                    {formatCompactINR(Math.round(animatedSavings / 100) * 100)}
+                  </div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.5rem" }}>
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: "0.3rem", padding: "0.25rem 0.6rem", background: "rgba(16,185,129,0.1)", border: "1px solid rgba(16,185,129,0.2)", borderRadius: "100px", color: "#4ade80", fontSize: "0.75rem", fontWeight: 600 }}>
+                      Exact: {formatINR(Math.round(animatedSavings / 100) * 100)}
+                    </span>
+                  </div>
                 </div>
-                <p style={{ color: "#86efac", fontSize: "0.875rem", marginTop: "0.3rem" }}>
-                  saved in total by switching providers
-                </p>
 
-                <div style={{ marginTop: "2rem", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "1.5rem" }}>
-                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "1rem" }}>
+                {/* ── SECONDARY: Duration & Slider ── */}
+                <div style={{ marginBottom: "2rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "1.25rem" }}>
                     <div>
-                      <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.25rem" }}>Duration</div>
-                      <div style={{ color: "#fff", fontWeight: 800, fontSize: "1.75rem", fontFamily: "'Cabinet Grotesk', sans-serif", lineHeight: 1.1 }}>
+                      <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.3rem" }}>Duration</div>
+                      <div style={{ color: "#fff", fontWeight: 700, fontSize: "1.1rem" }}>
                         {(() => {
                           if (savingsMonths === 1) return "1 month";
                           if (savingsMonths < 12) return `${savingsMonths} months`;
                           if (savingsMonths === 12) return "1 year";
                           if (savingsMonths === 18) return "18 months";
-                          if (savingsMonths % 12 === 0) {
-                            const yrs = savingsMonths / 12;
-                            return `${yrs} ${yrs === 1 ? "year" : "years"}`;
-                          }
-                          if (savingsMonths > 12) {
-                            const yrs = (savingsMonths / 12).toFixed(1);
-                            return `${yrs.endsWith('.0') ? yrs.slice(0, -2) : yrs} years`;
-                          }
+                          if (savingsMonths % 12 === 0) return `${savingsMonths / 12} years`;
+                          if (savingsMonths > 12) return `${(savingsMonths / 12).toFixed(1).replace(/\.0$/, "")} years`;
                           return `${savingsMonths} months`;
                         })()}
                       </div>
                     </div>
                     <div style={{ textAlign: "right" }}>
-                      <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.75rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.25rem" }}>Sending</div>
-                      <div style={{ color: "#4ade80", fontWeight: 700, fontSize: "0.95rem" }}>{formatCurrency(amount, currency)} / mo</div>
+                      <div style={{ color: "rgba(255,255,255,0.5)", fontSize: "0.7rem", textTransform: "uppercase", letterSpacing: "0.05em", marginBottom: "0.3rem" }}>Sending</div>
+                      <div style={{ color: "#fff", fontWeight: 700, fontSize: "1.1rem" }}>{formatCurrency(amount, currency)}<span style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.85rem", fontWeight: 500 }}>/mo</span></div>
                     </div>
                   </div>
 
@@ -927,60 +992,27 @@ export default function Home() {
                     onChange={(e) => setSavingsMonths(Number(e.target.value))}
                     className="savings-slider"
                     style={{
-                      background: `linear-gradient(to right, #4ade80 0%, #4ade80 ${((savingsMonths - 1) / 59) * 100}%, rgba(255,255,255,0.15) ${((savingsMonths - 1) / 59) * 100}%, rgba(255,255,255,0.15) 100%)`
+                      background: `linear-gradient(to right, #4ade80 0%, #4ade80 ${((savingsMonths - 1) / 59) * 100}%, rgba(255,255,255,0.1) ${((savingsMonths - 1) / 59) * 100}%, rgba(255,255,255,0.1) 100%)`
                     }}
                   />
-                  
-                  <p style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.75rem", marginTop: "0.75rem", textAlign: "center" }}>
-                    Drag to estimate long-term savings
-                  </p>
                 </div>
 
-                <div style={{ marginTop: "2rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem" }}>
-                  {[
-                    { label: "Monthly savings", val: formatINR(Math.round((inrReceived(best) - inrReceived(worst)) / 100) * 100) },
-                    { label: "Annual savings", val: formatINR(Math.round(((inrReceived(best) - inrReceived(worst)) * 12) / 100) * 100) },
-                    { 
-                      label: `Total savings over ${(() => {
-                        if (savingsMonths === 1) return "1 month";
-                        if (savingsMonths < 12) return `${savingsMonths} months`;
-                        if (savingsMonths === 12) return "1 year";
-                        if (savingsMonths === 18) return "18 months";
-                        if (savingsMonths % 12 === 0) return `${savingsMonths / 12} years`;
-                        return `${savingsMonths} months`;
-                      })()}`, 
-                      val: formatINR(Math.round(totalSavings / 100) * 100), 
-                      highlight: true 
-                    },
-                    { label: "Best provider", val: best.name },
-                  ].map((stat) => (
-                    <div 
-                      key={stat.label} 
-                      style={{ 
-                        background: stat.highlight ? "rgba(74,222,128,0.08)" : "rgba(255,255,255,0.04)", 
-                        border: stat.highlight ? "1px solid rgba(74,222,128,0.2)" : "1px solid rgba(255,255,255,0.05)",
-                        borderRadius: 16, 
-                        padding: "1rem",
-                        gridColumn: stat.highlight ? "span 2" : "auto"
-                      }}
-                    >
-                      <div style={{ fontSize: "0.72rem", color: stat.highlight ? "#86efac" : "rgba(255,255,255,0.45)", fontWeight: 500, marginBottom: 4 }}>{stat.label}</div>
-                      <div style={{ fontWeight: 800, color: stat.highlight ? "#4ade80" : "#fff", fontSize: stat.highlight ? "1.4rem" : "1.05rem", fontFamily: "'Cabinet Grotesk', sans-serif" }}>{stat.val}</div>
-                    </div>
-                  ))}
+                {/* ── TERTIARY: Supporting Metrics ── */}
+                <div style={{ borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem", display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.75rem" }}>Best provider</span>
+                    <span style={{ color: "#fff", fontWeight: 600, fontSize: "0.85rem" }}>{best.name}</span>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.75rem" }}>Monthly savings</span>
+                    <span style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.85rem" }}>{formatINR(Math.round((inrReceived(best) - inrReceived(worst)) / 100) * 100)}</span>
+                  </div>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <span style={{ color: "rgba(255,255,255,0.4)", fontSize: "0.75rem" }}>Annual savings</span>
+                    <span style={{ color: "rgba(255,255,255,0.7)", fontSize: "0.85rem" }}>{formatINR(Math.round(((inrReceived(best) - inrReceived(worst)) * 12) / 100) * 100)}</span>
+                  </div>
                 </div>
 
-                <div style={{ marginTop: "1.5rem", display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.75rem", borderTop: "1px solid rgba(255,255,255,0.08)", paddingTop: "1.25rem" }}>
-                  {[
-                    { label: "Best provider rate", val: `₹${(bestRate * (usdRates[currency] || 0)).toFixed(2)}/${currency}` },
-                    { label: "Worst provider rate", val: `₹${(worstRate * (usdRates[currency] || 0)).toFixed(2)}/${currency}` },
-                  ].map((stat) => (
-                    <div key={stat.label}>
-                      <div style={{ fontSize: "0.68rem", color: "rgba(255,255,255,0.4)", marginBottom: 2 }}>{stat.label}</div>
-                      <div style={{ fontWeight: 600, color: "rgba(255,255,255,0.9)", fontSize: "0.85rem" }}>{stat.val}</div>
-                    </div>
-                  ))}
-                </div>
               </div>
             </div>
           </div>

@@ -386,10 +386,11 @@
     /* ── Savings ── */
     .savings-section { background: var(--surface); }
     .savings-card {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      border-radius: 28px; padding: 3.5rem;
+      background: #0B0F19;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 24px; padding: 2.5rem;
       position: relative; overflow: hidden;
-      box-shadow: 0 24px 80px rgba(15,23,42,0.3);
+      box-shadow: 0 32px 80px rgba(0,0,0,0.15);
     }
     .savings-orb {
       position: absolute; border-radius: 50%; pointer-events: none; filter: blur(60px);
@@ -404,8 +405,8 @@
     }
     .savings-big {
       font-family: 'Cabinet Grotesk', sans-serif;
-      font-size: clamp(3rem, 8vw, 5.5rem); color: #4ade80;
-      font-weight: 800; line-height: 1; letter-spacing: -0.03em;
+      font-size: clamp(2.5rem, 6vw, 3.8rem); color: #fff;
+      font-weight: 800; line-height: 1; letter-spacing: -0.04em;
     }
     .savings-slider {
       -webkit-appearance: none; width: 100%; height: 6px;
