@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-48 -48 96 96" width="96" height="96">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#7C5CFC"/>
+      <stop offset="48%"  stop-color="#4F6FFF"/>
+      <stop offset="100%" stop-color="#38BDF8"/>
+    </linearGradient>
+  </defs>
+  <!-- Mark only — no wordmark, transparent background -->
+  <!-- Outer chevron: primary wing -->
+  <polygon points="-32,0 8,-34 18,-22 -8,0 18,22 8,34" fill="url(#g)"/>
+  <!-- Inner chevron: depth / highlight layer -->
+  <polygon points="-4,0 24,-18 32,-8 14,0 32,8 24,18" fill="url(#g)" opacity="0.55"/>
+</svg>

@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#1A0F3C"/>
+      <stop offset="100%" stop-color="#0A1A5C"/>
+    </linearGradient>
+    <linearGradient id="m" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"   stop-color="#8B6FFD"/>
+      <stop offset="48%"  stop-color="#5878FF"/>
+      <stop offset="100%" stop-color="#48C9FB"/>
+    </linearGradient>
+  </defs>
+  <!-- Background with rounded corners -->
+  <rect width="32" height="32" rx="7" fill="url(#bg)"/>
+  <!-- Mark: simplified for favicon legibility — single outer chevron + small inner -->
+  <g transform="translate(16,16)">
+    <polygon points="-7,0 2,-8 5,-5 -2,0 5,5 2,8" fill="url(#m)"/>
+    <polygon points="-1,0 5,-4 7,-2 3,0 7,2 5,4" fill="url(#m)" opacity="0.48"/>
+  </g>
+</svg>

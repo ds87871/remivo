@@ -1121,7 +1121,7 @@ export default function Home() {
       <nav className={`nav${scrolled ? " scrolled" : ""}`}>
         <div className="nav-inner">
           <a href="#" className="logo">
-            <img src="/logo-light.png" alt="Remivo" style={{ height: 28, width: "auto" }} />
+            <img src={scrolled ? "/logo-dark.svg" : "/logo-light.svg"} alt="Remivo" style={{ height: 28, width: "auto" }} />
           </a>
 
           <div className="nav-links">
@@ -1161,7 +1161,7 @@ export default function Home() {
       {menuOpen && (
         <div className="mobile-menu">
           <div style={{ padding: "0 1rem 1.5rem", borderBottom: "1px solid rgba(255,255,255,0.05)", marginBottom: "1.5rem" }}>
-            <img src="/logo-mark.png" alt="Remivo" style={{ height: 32, width: "auto" }} />
+            <img src="/logo-mark.svg" alt="Remivo" style={{ height: 32, width: "auto" }} />
           </div>
           {["Compare", "How it works", "Savings"].map((item) => (
             <a
@@ -1923,7 +1923,12 @@ export default function Home() {
                 </div>
 
                 <button type="submit" className="alert-submit" disabled={isSubmitting} style={{ opacity: isSubmitting ? 0.7 : 1, cursor: isSubmitting ? "not-allowed" : "pointer" }}>
-                  {isSubmitting ? "Joining waitlist..." : "Notify Me When Rates Improve"}
+                  {isSubmitting ? (
+                    <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+                      <img src="/logo-mark.svg" alt="Loading" className="animate-pulse" style={{ height: 20, width: "auto" }} />
+                      Joining waitlist...
+                    </span>
+                  ) : "Notify Me When Rates Improve"}
                 </button>
 
                 <div style={{ textAlign: "center", marginTop: "1.25rem", fontSize: "0.75rem", color: "var(--muted2)", display: "flex", alignItems: "center", justifyContent: "center", gap: 6 }}>
@@ -1974,7 +1979,7 @@ export default function Home() {
           <div className="footer-grid">
             <div>
               <div className="footer-logo">
-                <img src="/logo-light.png" alt="Remivo" style={{ height: 32, width: "auto", marginBottom: 8 }} />
+                <img src="/logo-light.svg" alt="Remivo" style={{ height: 32, width: "auto", marginBottom: 8 }} />
               </div>
               <p className="footer-desc">
                 Remivo helps overseas Indians compare remittance

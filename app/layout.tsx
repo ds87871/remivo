@@ -15,9 +15,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Remivo | Live Money Transfer Rate Comparison",
   description: "Compare live money transfer rates from Wise, Remitly, PaySend, and others. Find the best rates and discover hidden fees for sending money to India in real-time.",
-  icons: { icon: "/favicon.png", apple: "/favicon.png" },
+  icons: { icon: "/icon.svg", apple: "/icon.svg" },
   openGraph: {
-    images: [{ url: "/logo-dark.png" }]
+    images: [{ url: "/logo-dark.svg" }]
   }
 };
 

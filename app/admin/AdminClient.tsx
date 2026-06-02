@@ -86,7 +86,7 @@ export default function AdminClient({ leads }: { leads: any[] }) {
       <div className="admin-container">
         <header className="admin-header">
           <h1 className="admin-title">
-            <img src="/logo-mark.png" alt="Remivo" style={{ height: 24, width: "auto" }} />
+            <img src="/logo-mark.svg" alt="Remivo" style={{ height: 24, width: "auto" }} />
             Remivo Admin
             <span className="admin-badge">{filteredLeads.length} Leads</span>
           </h1>
