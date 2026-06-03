@@ -20,6 +20,9 @@ interface Provider {
   badgeType?: "best" | "fast" | "cheap";
   rating: number;
   reviews: string;
+  error?: string;
+  amountReceived?: number;
+  status?: "success" | "estimated" | "error";
 }
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
@@ -367,26 +370,31 @@ export default function Home() {
   useEffect(() => {
     async function loadRates() {
       try {
-        const res = await fetch("/api/rates");
+        const res = await fetch("/api/live-rates");
         if (res.ok) {
           const data = await res.json();
-          if (data.USD_RATES) {
-            setUsdRates(data.USD_RATES);
+          if (data.usdRates) {
+            setUsdRates(data.usdRates);
           }
-          if (data.USD_to_INR) {
-            const baseInr = data.USD_to_INR;
+          
+          if (data.providers) {
             setProviders(prev => prev.map(p => {
-              let factor = 1.0;
-              if (p.id === "wise") factor = 1.00;
-              else if (p.id === "remitly") factor = 0.9958;
-              else if (p.id === "paysend") factor = 0.9950;
-              else if (p.id === "wu") factor = 0.9836;
-              else if (p.id === "xoom") factor = 0.9890;
+              const live = data.providers[p.id];
               
-              return {
-                ...p,
-                rate: parseFloat((baseInr * factor).toFixed(2))
-              };
+              if (live && (live.status === "success" || live.status === "estimated")) {
+                return {
+                  ...p,
+                  rate: parseFloat(live.rate.toFixed(2)),
+                  fee: live.fee,
+                  time: live.speed || p.time,
+                  amountReceived: live.amountReceived,
+                  status: live.status,
+                  error: undefined // ensure error is cleared
+                };
+              } else if (live && live.status === "error") {
+                return { ...p, error: live.message };
+              }
+              return p;
             }));
           }
         }
@@ -452,13 +460,21 @@ export default function Home() {
   const worstRate = Math.min(...providers.map((p) => p.rate));
 
   function inrReceived(p: Provider) {
+    if (p.error) return 0;
     const net = usdAmount - p.fee;
     return Math.max(0, net * p.rate);
   }
 
-  const sorted = [...providers].sort((a, b) => inrReceived(b) - inrReceived(a));
-  const best = sorted[0];
-  const worst = sorted[sorted.length - 1];
+  const sorted = [...providers].sort((a, b) => {
+    if (a.error && !b.error) return 1;
+    if (!a.error && b.error) return -1;
+    return inrReceived(b) - inrReceived(a);
+  });
+  
+  // Best/worst are calculated from valid providers only
+  const validProviders = sorted.filter(p => !p.error);
+  const best = validProviders[0] || providers[0];
+  const worst = validProviders[validProviders.length - 1] || providers[0];
   const annualSaving = (inrReceived(best) - inrReceived(worst)) * 12;
   const totalSavings = (inrReceived(best) - inrReceived(worst)) * savingsMonths;
 
@@ -868,7 +884,15 @@ export default function Home() {
                     </div>
 
                     <div className="p-name-block">
-                      <div className="p-name">{p.name}</div>
+                      <div className="p-name" style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        {p.name}
+                        {p.status === "success" && (
+                          <span style={{ fontSize: "0.6rem", background: "rgba(18,183,106,0.15)", color: "#12B76A", padding: "2px 6px", borderRadius: "4px", fontWeight: 700, letterSpacing: "0.5px" }}>LIVE</span>
+                        )}
+                        {p.status === "estimated" && (
+                          <span style={{ fontSize: "0.6rem", background: "rgba(255,255,255,0.1)", color: "rgba(255,255,255,0.7)", padding: "2px 6px", borderRadius: "4px", fontWeight: 700, letterSpacing: "0.5px" }}>ESTIMATED</span>
+                        )}
+                      </div>
                       <div className="p-meta" style={{ display: "flex", alignItems: "center", gap: 6, flexWrap: "wrap" }}>
                         <Stars rating={p.rating} />
                         <span>{p.rating} · {p.reviews} reviews</span>
@@ -900,14 +924,23 @@ export default function Home() {
               })}
             </div>
 
-            <div className="compare-footer">
-              <span style={{ fontSize: "0.78rem", color: "var(--muted2)" }}>
-                <span className="live-dot" />
-                Rates updated live · Indicative only
-              </span>
-              <button className="btn btn-primary" style={{ padding: "0.55rem 1.25rem", fontSize: "0.82rem" }} onClick={() => document.getElementById("rate-alerts")?.scrollIntoView({ behavior: "smooth" })}>
-                Set rate alert →
-              </button>
+            <div className="compare-footer" style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", width: "100%" }}>
+                <span style={{ fontSize: "0.78rem", color: "var(--muted2)" }}>
+                  <span className="live-dot" />
+                  Rates updated live · Indicative only
+                </span>
+                <button className="btn btn-primary" style={{ padding: "0.55rem 1.25rem", fontSize: "0.82rem" }} onClick={() => document.getElementById("rate-alerts")?.scrollIntoView({ behavior: "smooth" })}>
+                  Set rate alert →
+                </button>
+              </div>
+              
+              <div style={{ fontSize: "0.7rem", color: "rgba(255,255,255,0.5)", textAlign: "left", display: "flex", alignItems: "flex-start", gap: 6 }}>
+                <span style={{ fontSize: "0.85rem" }}>ℹ️</span>
+                <span>
+                  <strong>LIVE</strong> = Real provider quote. <strong>ESTIMATED</strong> = Calculated using current market conditions.
+                </span>
+              </div>
             </div>
           </div>
         </div>
