@@ -1407,68 +1407,96 @@ export default function Home() {
       <footer>
         <div className="footer-inner">
           <div className="footer-grid">
-            <div>
+            <div className="footer-col-main">
               <div className="footer-logo">
-                <img src="/logo-dark.svg" alt="Remivo" style={{ height: 32, width: "auto", marginBottom: 8 }} />
+                <img src="/logo-dark.svg" alt="Remivo" style={{ height: 28, width: "auto", marginBottom: 4 }} />
               </div>
-              <p className="footer-desc">
-                Remivo helps overseas Indians compare remittance
-                providers instantly — so more money reaches home.
+              <p className="footer-desc" style={{ maxWidth: 280, color: "#94a3b8", fontSize: "0.85rem" }}>
+                Compare transfer providers and exchange rates before sending money to India.
               </p>
-              <div style={{ display: "flex", gap: 8, marginTop: "1.25rem" }}>
-                {["🇦🇪", "🇸🇦", "🇶🇦", "🇰🇼", "🇴🇲"].map((flag) => (
-                  <span key={flag} style={{ fontSize: "1.1rem" }}>{flag}</span>
-                ))}
+            </div>
+
+            <div className="footer-col-links">
+              <div className="footer-heading">Product</div>
+              <div className="footer-links">
+                <a href="#" onClick={(e) => e.preventDefault()} className="footer-link">Compare Rates</a>
+                <a href="#" onClick={(e) => e.preventDefault()} className="footer-link">Savings Calculator</a>
+                <a href="#" onClick={(e) => e.preventDefault()} className="footer-link">Rate Alerts</a>
+                <a href="#" onClick={(e) => e.preventDefault()} className="footer-link">Provider Reviews</a>
               </div>
             </div>
 
-            {[
-              {
-                heading: "Product",
-                links: ["Compare rates", "Rate alerts", "Savings calculator", "Provider reviews", "FX intelligence"],
-              },
-              {
-                heading: "Company",
-                links: ["About", "Blog", "Careers", "Press", "Contact"],
-              },
-              {
-                heading: "Legal",
-                links: ["Privacy policy", "Terms of service", "Disclaimer", "Cookie policy"],
-              },
-            ].map((col) => (
-              <div key={col.heading}>
-                <div className="footer-heading">{col.heading}</div>
-                <div className="footer-links">
-                  {col.links.map((l) => (
-                    <a key={l} href="#" onClick={(e) => e.preventDefault()} className="footer-link">{l}</a>
-                  ))}
-                </div>
+            <div className="footer-col-links">
+              <div className="footer-heading">Company</div>
+              <div className="footer-links">
+                <a href="#" onClick={(e) => e.preventDefault()} className="footer-link">About</a>
+                <a href="#" onClick={(e) => e.preventDefault()} className="footer-link">Blog</a>
+                <a href="#" onClick={(e) => e.preventDefault()} className="footer-link">Careers</a>
+                <a href="#" onClick={(e) => e.preventDefault()} className="footer-link">Contact</a>
               </div>
-            ))}
-          </div>
-
-          <div className="footer-bottom">
-            <div style={{ fontSize: "0.75rem", color: "#536553", marginBottom: "1.5rem", maxWidth: "900px", lineHeight: 1.6 }}>
-              <strong>Disclaimer:</strong> Remivo is an independent comparison platform. We do not provide money transfer services. Rates shown are indicative and may vary by provider. Always confirm the final rate and fees directly with the provider before initiating a transfer.
             </div>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", flexWrap: "wrap", gap: "1rem" }}>
-              <span className="footer-copy">
-                © 2024 Remivo. All rights reserved.
-              </span>
-              <div className="footer-flags">
+
+            <div className="footer-col-links">
+              <div className="footer-heading">Legal</div>
+              <div className="footer-links">
+                <a href="#" onClick={(e) => e.preventDefault()} className="footer-link">Privacy Policy</a>
+                <a href="#" onClick={(e) => e.preventDefault()} className="footer-link">Terms</a>
+                <a href="#" onClick={(e) => e.preventDefault()} className="footer-link">Disclaimer</a>
+                <a href="#" onClick={(e) => e.preventDefault()} className="footer-link">Cookie Policy</a>
+              </div>
+            </div>
+
+            <div className="footer-col-corridors">
+              <div className="footer-heading">Global Corridors</div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "0.5rem" }}>
                 {[
-                  { flag: "🇦🇪", code: "UAE" },
-                  { flag: "🇸🇦", code: "KSA" },
-                  { flag: "🇶🇦", code: "Qatar" },
-                  { flag: "🇮🇳", code: "India" },
-                ].map((f) => (
-                  <span key={f.code} className="flag-chip">
-                    {f.flag} {f.code}
-                  </span>
+                  { f: "🇦🇪", n: "UAE" }, { f: "🇸🇦", n: "Saudi Arabia" },
+                  { f: "🇬🇧", n: "United Kingdom" }, { f: "🇺🇸", n: "United States" },
+                  { f: "🇨🇦", n: "Canada" }, { f: "🇦🇺", n: "Australia" }
+                ].map(c => (
+                  <div key={c.n} className="footer-country-card">
+                    <span style={{ fontSize: "1.1rem" }}>{c.f}</span>
+                    <span style={{ fontSize: "0.75rem", fontWeight: 500, color: "#cbd5e1" }}>{c.n}</span>
+                  </div>
                 ))}
               </div>
             </div>
           </div>
+
+          <div className="footer-divider" />
+
+          <div className="footer-row-3">
+            <div className="footer-copyright">
+              <div>© 2026 Remivo</div>
+              <div style={{ color: "#64748b", marginTop: 4 }}>Independent comparison platform.</div>
+            </div>
+            
+            <div className="footer-providers-list">
+              <div style={{ fontSize: "0.65rem", textTransform: "uppercase", letterSpacing: "0.05em", color: "#64748b", marginBottom: 8 }}>Supported Providers</div>
+              <div style={{ display: "flex", gap: "1.5rem", alignItems: "center", flexWrap: "wrap" }}>
+                <span className="footer-provider-wordmark">Wise</span>
+                <span className="footer-provider-wordmark">Remitly</span>
+                <span className="footer-provider-wordmark">Xoom</span>
+                <span className="footer-provider-wordmark">PaySend</span>
+                <span className="footer-provider-wordmark">Western Union</span>
+              </div>
+            </div>
+
+            <div className="footer-status">
+              <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#94a3b8" }}>
+                <span style={{ width: 6, height: 6, borderRadius: "50%", background: "#10b981", display: "inline-block" }}></span>
+                Updated every 15 minutes
+              </div>
+              <div style={{ color: "#64748b", marginTop: 4 }}>Live + Estimated provider data</div>
+            </div>
+          </div>
+
+          <details className="footer-disclaimer-details">
+            <summary className="footer-disclaimer-summary">Legal Disclaimer & Disclosures</summary>
+            <div className="footer-disclaimer-content">
+              Remivo is an independent comparison platform and is not a financial institution, bank, or remittance service provider. We do not process transactions or handle funds. Exchange rates, transfer fees, and delivery times are provided for informational purposes only. "Live" data is fetched directly from provider public APIs where possible, while "Estimated" data relies on mid-market rates and known fee structures. Always verify the final amount and terms directly with your chosen provider before completing a transfer.
+            </div>
+          </details>
         </div>
       </footer>
     </>
