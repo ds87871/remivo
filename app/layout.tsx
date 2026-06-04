@@ -13,6 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://remivo-beta.vercel.app"),
   title: "Remivo | Live Money Transfer Rate Comparison",
   description: "Compare live money transfer rates from Wise, Remitly, PaySend, and others. Find the best rates and discover hidden fees for sending money to India in real-time.",
   icons: { icon: "/icon.svg", apple: "/icon.svg" },
