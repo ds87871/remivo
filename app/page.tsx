@@ -23,6 +23,7 @@ interface Provider {
   error?: string;
   amountReceived?: number;
   status?: "success" | "estimated" | "error";
+  url?: string;
 }
 
 // ─── Mock Data ────────────────────────────────────────────────────────────────
@@ -40,6 +41,7 @@ const PROVIDERS: Provider[] = [
     badgeType: "best",
     rating: 4.8,
     reviews: "2.1M",
+    url: "https://wise.com/",
   },
   {
     id: "remitly",
@@ -54,6 +56,7 @@ const PROVIDERS: Provider[] = [
     badgeType: "fast",
     rating: 4.5,
     reviews: "890K",
+    url: "https://www.remitly.com/",
   },
   {
     id: "paysend",
@@ -68,6 +71,7 @@ const PROVIDERS: Provider[] = [
     badgeType: "cheap",
     rating: 4.3,
     reviews: "340K",
+    url: "https://paysend.com/",
   },
   {
     id: "wu",
@@ -81,6 +85,7 @@ const PROVIDERS: Provider[] = [
     time: "10 min",
     rating: 3.9,
     reviews: "5.2M",
+    url: "https://www.westernunion.com/",
   },
   {
     id: "xoom",
@@ -93,6 +98,7 @@ const PROVIDERS: Provider[] = [
     time: "1 hour",
     rating: 4.1,
     reviews: "1.2M",
+    url: "https://www.xoom.com/",
   },
 ];
 
@@ -185,9 +191,8 @@ export default function Home() {
     "Qatar": { phoneCode: "+974", currency: "QAR" },
     "Kuwait": { phoneCode: "+965", currency: "KWD" },
     "Oman": { phoneCode: "+968", currency: "OMR" },
-    "India": { phoneCode: "+91", currency: "USD" },
-    "UK": { phoneCode: "+44", currency: "GBP" },
-    "USA": { phoneCode: "+1", currency: "USD" },
+    "United Kingdom": { phoneCode: "+44", currency: "GBP" },
+    "United States": { phoneCode: "+1", currency: "USD" },
     "Canada": { phoneCode: "+1", currency: "CAD" },
     "Australia": { phoneCode: "+61", currency: "AUD" }
   };
@@ -253,9 +258,9 @@ export default function Home() {
         else if (data.country_name === "Qatar") countryKey = "Qatar";
         else if (data.country_name === "Kuwait") countryKey = "Kuwait";
         else if (data.country_name === "Oman") countryKey = "Oman";
-        else if (data.country_name === "India") countryKey = "India";
-        else if (data.country_name === "United Kingdom") countryKey = "UK";
-        else if (data.country_name === "United States") countryKey = "USA";
+        else if (data.country_name === "India") countryKey = "United States"; // Default mapping if in India
+        else if (data.country_name === "United Kingdom") countryKey = "United Kingdom";
+        else if (data.country_name === "United States") countryKey = "United States";
         else if (data.country_name === "Canada") countryKey = "Canada";
         else if (data.country_name === "Australia") countryKey = "Australia";
 
@@ -863,23 +868,12 @@ export default function Home() {
                     {p.badge && (
                       <span className={`p-badge badge-${p.badgeType}`}>{p.badge}</span>
                     )}
-
-                    <div className="p-logo">
-                      {p.id === "wise" && (
-                        <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 26, height: 26 }}><path d="M5 10 L25 10 L29 20 L37 10 L45 10 L33 26 L42 40 L34 40 L27 28 L21 40 L13 40 L23 23 Z" fill="#00B9FF" /></svg>
-                      )}
-                      {p.id === "remitly" && (
-                        <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 26, height: 26 }}><path d="M10 5 H30 C38 5 42 10 42 16 C42 22 38 27 30 27 H18 V45 H10 Z M18 13 V20 H30 C33 20 34 18 34 16 C34 14 33 13 30 13 Z" fill="#FF6B35" /></svg>
-                      )}
-                      {p.id === "paysend" && (
-                        <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 26, height: 26 }}><circle cx="18" cy="25" r="12" fill="#7C3AED" fillOpacity="0.95" /><circle cx="32" cy="25" r="12" fill="#FFCC00" fillOpacity="0.85" /></svg>
-                      )}
-                      {p.id === "wu" && (
-                        <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 26, height: 26 }}><rect x="5" y="5" width="40" height="40" rx="6" fill="#000" /><path d="M12 15 H18 L21 28 L24 15 H30 L25 35 H19 Z M31 15 H37 V28 C37 32 35 35 31 35 C28 35 26 32 26 28 V15 H31 Z" fill="#FFCC00" /></svg>
-                      )}
-                      {p.id === "xoom" && (
-                        <svg viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ width: 26, height: 26 }}><path d="M10 10 L22 25 L10 40 H18 L25 30 L32 40 H40 L28 25 L40 10 H32 L25 20 L18 10 Z" fill="#0070E0" /></svg>
-                      )}
+                    <div className="p-logo" style={{ overflow: "hidden", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      {p.id === "wise" && <img src="/providers/media__1780553564969.png" alt="Wise" style={{ width: "100%", height: "100%", objectFit: "contain" }} />}
+                      {p.id === "remitly" && <img src="/providers/media__1780553564980.png" alt="Remitly" style={{ width: "100%", height: "100%", objectFit: "contain" }} />}
+                      {p.id === "paysend" && <img src="/providers/media__1780553564986.png" alt="PaySend" style={{ width: "100%", height: "100%", objectFit: "contain" }} />}
+                      {p.id === "wu" && <img src="/providers/media__1780553564995.png" alt="Western Union" style={{ width: "100%", height: "100%", objectFit: "contain" }} />}
+                      {p.id === "xoom" && <img src="/providers/media__1780553631034.png" alt="Xoom" style={{ width: "100%", height: "100%", objectFit: "contain" }} />}
                       {!["wise", "remitly", "paysend", "wu", "xoom"].includes(p.id) && <span style={{ color: "var(--ink)" }}>{p.abbr}</span>}
                     </div>
 
@@ -918,6 +912,22 @@ export default function Home() {
                         )}
                         {i === filtered.length - 1 && <span style={{ fontSize: "0.7rem", color: "var(--muted2)" }}>worst</span>}
                       </div>
+                    </div>
+
+                    <div className="p-cta" style={{ display: "flex", alignItems: "center", justifyContent: "flex-end" }}>
+                      <a 
+                        href={p.url || "#"}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={`btn ${p.status === "success" ? "btn-primary" : "btn-outline"}`}
+                        style={{ padding: "0.55rem 1rem", fontSize: "0.8rem", whiteSpace: "nowrap", textDecoration: "none", textAlign: "center" }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          console.log(`[Analytics] Outbound click to ${p.id}`);
+                        }}
+                      >
+                        {p.status === "success" ? "Transfer Now" : "Check Provider"}
+                      </a>
                     </div>
                   </div>
                 );
@@ -1200,20 +1210,46 @@ export default function Home() {
               We track exchange rates across major global corridors.
             </p>
           </div>
-          <div style={{ display: "flex", flexWrap: "wrap", justifyContent: "center", gap: "1rem", maxWidth: 800, margin: "0 auto" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))", gap: "1rem", maxWidth: 960, margin: "0 auto" }}>
             {[
               { flag: "🇦🇪", name: "UAE" },
               { flag: "🇸🇦", name: "Saudi Arabia" },
               { flag: "🇶🇦", name: "Qatar" },
               { flag: "🇰🇼", name: "Kuwait" },
               { flag: "🇴🇲", name: "Oman" },
-              { flag: "🇬🇧", name: "UK" },
-              { flag: "🇺🇸", name: "USA" },
+              { flag: "🇬🇧", name: "United Kingdom" },
+              { flag: "🇺🇸", name: "United States" },
               { flag: "🇨🇦", name: "Canada" },
               { flag: "🇦🇺", name: "Australia" },
             ].map((c) => (
-              <div key={c.name} style={{ display: "flex", alignItems: "center", gap: "8px", background: "var(--surface)", border: "1px solid var(--border2)", padding: "0.75rem 1.25rem", borderRadius: "100px", fontSize: "0.95rem", fontWeight: 500, color: "var(--ink)" }}>
-                <span style={{ fontSize: "1.2rem" }}>{c.flag}</span> {c.name}
+              <div 
+                key={c.name} 
+                style={{ 
+                  display: "flex", alignItems: "center", gap: "16px", 
+                  background: "#fff", border: "1px solid var(--border2)", 
+                  padding: "1.25rem 1.5rem", borderRadius: "16px", 
+                  boxShadow: "0 2px 8px rgba(0,0,0,0.02)",
+                  transition: "transform 0.2s, box-shadow 0.2s, border-color 0.2s",
+                  cursor: "default"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = "translateY(-3px)";
+                  e.currentTarget.style.boxShadow = "0 12px 32px rgba(79,70,229,0.08)";
+                  e.currentTarget.style.borderColor = "rgba(79,70,229,0.3)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,0,0,0.02)";
+                  e.currentTarget.style.borderColor = "var(--border2)";
+                }}
+              >
+                <div style={{ width: 48, height: 48, display: "flex", alignItems: "center", justifyContent: "center", background: "var(--surface)", border: "1px solid var(--border)", borderRadius: "12px", fontSize: "1.6rem" }}>
+                  {c.flag}
+                </div>
+                <div>
+                  <div style={{ fontWeight: 700, color: "var(--ink)", fontSize: "0.95rem", lineHeight: 1.2 }}>{c.name}</div>
+                  <div style={{ fontSize: "0.75rem", color: "var(--muted)", marginTop: 2, fontWeight: 500 }}>To India (INR)</div>
+                </div>
               </div>
             ))}
           </div>
